@@ -448,7 +448,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Reload FPS Count
+  m_text: Reset FPS Count
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -785,7 +785,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: '5%:'
+  m_text: 'L.5%:'
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -1352,7 +1352,7 @@ Transform:
   m_GameObject: {fileID: 963194225}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 1, z: -10}
+  m_LocalPosition: {x: 0, y: 1, z: -20}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -1371,7 +1371,7 @@ GameObject:
   - component: {fileID: 1055429630}
   - component: {fileID: 1055429629}
   m_Layer: 5
-  m_Name: ReloadFPSButton
+  m_Name: ResetFPSButton
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1570,7 +1570,7 @@ GameObject:
   - component: {fileID: 1173554616}
   - component: {fileID: 1173554617}
   m_Layer: 0
-  m_Name: UIManager
+  m_Name: FPSShower
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1603,6 +1603,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 582b18ca0990d8d4dbad064f97ce11c3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _currentFPS: {fileID: 1325679517}
+  _averageFPS: {fileID: 1701411143}
+  _worst5FPS: {fileID: 132140618}
+  _worst1FPS: {fileID: 1217165786}
+  _resetFPSButton: {fileID: 1055429629}
+  _startFPSButton: {fileID: 1940987169}
+  _fpsCounter: {fileID: 790264764}
 --- !u!1 &1217165784
 GameObject:
   m_ObjectHideFlags: 0
@@ -2789,7 +2796,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: '1%:'
+  m_text: 'L.1%:'
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
