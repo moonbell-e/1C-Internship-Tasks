@@ -34,12 +34,14 @@ public class FPSShower : MonoBehaviour
     private void ShowFPS()
     {
         _isShowFPS = true;
+        _fpsCounter.ResetFPSCalculation();
     }
 
     private void ResetFPS()
     {
         _isShowFPS = false;
-
+        _fpsCounter.StopFPSCalculation();
+        
         _currentFPS.text = "0";
         _averageFPS.text = "0";
         _worst5FPS.text = "0";
