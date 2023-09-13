@@ -6,19 +6,13 @@ public class ObjectGenerator : MonoBehaviour
     [SerializeField] private GameObject _objectPrefab;
     [SerializeField] private Transform _objectContainer;
     [SerializeField] private List<GameObject> _spawnedObjects;
-    private int _deleteCount;
-
-    private int _spawnCount;
-
-    private void Start()
-    {
-        _spawnCount = 100;
-        _deleteCount = 100;
-    }
-
+    
+    private const int DeleteCount = 100;
+    private const int SpawnCount = 100;
+    
     public void GenerateObjects()
     {
-        for (var i = 0; i < _spawnCount; i++)
+        for (var i = 0; i < SpawnCount; i++)
         {
             var spawnPosition = new Vector3(Random.Range(-10f, 10f), 0.5f, Random.Range(-10f, 10f));
             var newObject = Instantiate(_objectPrefab, spawnPosition, Quaternion.identity, _objectContainer);
@@ -30,7 +24,7 @@ public class ObjectGenerator : MonoBehaviour
     {
         if (_spawnedObjects.Count <= 0) return;
 
-        for (var i = 0; i < _deleteCount; i++)
+        for (var i = 0; i < DeleteCount; i++)
         {
             var objectToDestroy = _spawnedObjects[^1];
             _spawnedObjects.RemoveAt(_spawnedObjects.Count - 1);

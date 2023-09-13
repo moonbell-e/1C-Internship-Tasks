@@ -31,7 +31,7 @@ public class FPSShower : MonoBehaviour
         _worst1FPS.text = _fpsCounter.Worst1PercentFPS.ToString();
     }
 
-    public void ShowFPS()
+    private void ShowFPS()
     {
         _isShowFPS = true;
     }
