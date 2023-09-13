@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using System.Linq;
 using UnityEngine;
 
@@ -40,7 +41,7 @@ public class FPSCounter : MonoBehaviour
         switch (_calculationMethod)
         {
             case CalculationMethod.NumberOfFrames:
-                CalculateFPSNumberMethod();
+                CalculateFPS();
                 break;
             case CalculationMethod.FrameTime:
                 CalculateFPSFrameTimeMethod();
@@ -65,11 +66,8 @@ public class FPSCounter : MonoBehaviour
     
     private void UpdateBuffers()
     {
-        CurrentFPS = (int)(1f / Time.unscaledDeltaTime);
-        _fpsBuffer[_fpsBufferIndex++] = CurrentFPS;
-
-        float frameTime = Time.unscaledDeltaTime;
-        _frameTimeBuffer[_frameTimeIndex++] = frameTime;
+        UpdateFpsBuffer(); 
+        UpdateFrameTimeBuffer();
 
         if (_fpsBufferIndex < _bufferSize) return;
         
@@ -77,18 +75,31 @@ public class FPSCounter : MonoBehaviour
         _frameTimeIndex = 0;
     }
 
+    private void UpdateFpsBuffer()
+    {
+        CurrentFPS = (int)(1f / Time.unscaledDeltaTime);
+        _fpsBuffer[_fpsBufferIndex++] = CurrentFPS;
+    }
+
+    private void UpdateFrameTimeBuffer()
+    {
+        float frameTime = Time.unscaledDeltaTime;
+        _frameTimeBuffer[_frameTimeIndex++] = frameTime;
+    }
+
     #region NumberOfFrames Calculation
 
-    private void CalculateFPSNumberMethod()
+    private void CalculateFPS()
     {
         var sum = 0;
         for (var i = 0; i < _bufferSize; i++) sum += _fpsBuffer[i];
+        
         AverageFPS = sum / _bufferSize;
-        Worst5PercentFPS = CalculatePercentilesNumberMethod(FifthPercentile);
-        Worst1PercentFPS = CalculatePercentilesNumberMethod(FirstPercentile);
+        Worst5PercentFPS = CalculatePercentiles(FifthPercentile);
+        Worst1PercentFPS = CalculatePercentiles(FirstPercentile);
     }
 
-    private int CalculatePercentilesNumberMethod(float percentile)
+    private int CalculatePercentiles(float percentile)
     {
         int[] sortedFpsBuffer = _fpsBuffer.OrderBy(x => x).ToArray();
         int sequenceNumPercentile = Mathf.RoundToInt((percentile * _bufferSize) / 100);
@@ -103,10 +114,9 @@ public class FPSCounter : MonoBehaviour
     private void CalculateFPSFrameTimeMethod()
     {
         float sumOfFrameTime = 0f;
-        float averageFrameTime = 0f;
-        
+
         for (int i = 0; i < _bufferSize; i++) sumOfFrameTime += _frameTimeBuffer[i];
-        averageFrameTime = sumOfFrameTime / _bufferSize;
+        var averageFrameTime = sumOfFrameTime / _bufferSize;
 
         AverageFPS = (int)(1f / averageFrameTime);
         Worst5PercentFPS = (int)(1f/CalculatePercentilesFrameTimeMethod(FifthPercentile));
