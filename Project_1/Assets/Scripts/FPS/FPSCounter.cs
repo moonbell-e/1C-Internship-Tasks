@@ -10,10 +10,12 @@ public class FPSCounter : MonoBehaviour
 
     private int _frameCount;
     private float _totalFrameTime;
+    private float _lastPercentileUpdateTime;
     private bool _isCalculate;
 
     private const float FifthPercentile = 0.05f;
     private const float FirstPercentile = 0.01f;
+    private const float PercentilesUpdateInterval = 5f;
     private const int MaxFPSCount = 1000;
 
 
@@ -33,6 +35,12 @@ public class FPSCounter : MonoBehaviour
         if (!_isCalculate) return;
 
         CalculateFPS();
+        bool isIntervalReached = Time.unscaledTime - _lastPercentileUpdateTime >= PercentilesUpdateInterval;
+        if (isIntervalReached)
+        {
+            CalculatePercentiles();
+            _lastPercentileUpdateTime = Time.unscaledTime;
+        }
     }
 
     public void StopFPSCalculation()
@@ -50,6 +58,7 @@ public class FPSCounter : MonoBehaviour
     {
         _totalFrameTime = 0f;
         _frameCount = 0;
+        _lastPercentileUpdateTime = 0;
         Array.Clear(_fpsArray, 0, _fpsArray.Length);
         Array.Clear(_frameTimeArray, 0, _frameTimeArray.Length);
         CurrentFPS = AverageFPS = Worst5PercentFPS = Worst1PercentFPS = 0;
@@ -63,7 +72,6 @@ public class FPSCounter : MonoBehaviour
         
         _totalFrameTime += CountFrameTime();
         AverageFPS = (int)(_frameCount / _totalFrameTime);
-        CalculateWorstPercentileFPS();
     }
 
     private void UpdateArrays()
@@ -74,12 +82,12 @@ public class FPSCounter : MonoBehaviour
 
     private static float CountFrameTime()
     {
-        float frameTime = Time.unscaledDeltaTime;
+        var frameTime = Time.unscaledDeltaTime;
         
         return frameTime;
     }
 
-    private void CalculateWorstPercentileFPS()
+    private void CalculatePercentiles()
     {
         switch (_calculationMethod)
         {
@@ -96,12 +104,12 @@ public class FPSCounter : MonoBehaviour
 
     private float GetPercentileOfFPS(float percentile)
     {
-        int thresholdPercent = Mathf.RoundToInt(_frameCount * percentile);
+        var thresholdPercent = Mathf.RoundToInt(_frameCount * percentile);
         if (thresholdPercent == 0) return 0;
-        int framesCount = 0;
+        var framesCount = 0;
         float result = 0;
 
-        for (int i = 0; framesCount < thresholdPercent; i++)
+        for (var i = 0; framesCount < thresholdPercent; i++)
         {
             framesCount += _fpsArray[i];
             if (framesCount > thresholdPercent)
@@ -119,12 +127,12 @@ public class FPSCounter : MonoBehaviour
 
     private float GetPercentileOfFrameTime(float percentile)
     {
-        float thresholdPercent = _totalFrameTime * percentile;
+        var thresholdPercent = _totalFrameTime * percentile;
         if (thresholdPercent == 0) return 0;
         float framesCount = 0;
         float result = 0;
 
-        for (int i = 0; framesCount < thresholdPercent; i++)
+        for (var i = 0; framesCount < thresholdPercent; i++)
         {
             framesCount += _frameTimeArray[i];
             if (framesCount > thresholdPercent)
@@ -137,6 +145,7 @@ public class FPSCounter : MonoBehaviour
                 result += i * _frameTimeArray[i];
             }
         }
+        
         return result / thresholdPercent;
     }
 }

@@ -944,19 +944,7 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 628770988}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 2007061653}
-        m_TargetAssemblyTypeName: ObjectGenerator, Assembly-CSharp
-        m_MethodName: GenerateObjects
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
+      m_Calls: []
 --- !u!114 &628770988
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1171,19 +1159,7 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 784375149}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 2007061653}
-        m_TargetAssemblyTypeName: ObjectGenerator, Assembly-CSharp
-        m_MethodName: DeleteObjects
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
+      m_Calls: []
 --- !u!114 &784375149
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3056,6 +3032,8 @@ MonoBehaviour:
   _objectPrefab: {fileID: 2254298003163616917, guid: 625dc5c60cb94464e9bb430db6105fb7, type: 3}
   _objectContainer: {fileID: 478124380}
   _spawnedObjects: []
+  _generateObjectsButton: {fileID: 628770987}
+  _deleteObjectsButton: {fileID: 784375148}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0

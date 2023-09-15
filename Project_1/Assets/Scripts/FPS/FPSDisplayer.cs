@@ -37,8 +37,8 @@ public class FPSDisplayer : MonoBehaviour
     {
         _currentFPS.text = _fpsCounter.CurrentFPS.ToString();
         _averageFPS.text = _fpsCounter.AverageFPS.ToString();
-        _worst5FPS.text = _fpsCounter.Worst5PercentFPS >= 0 ? _fpsCounter.Worst5PercentFPS.ToString() : "N/A";
-        _worst1FPS.text = _fpsCounter.Worst1PercentFPS >= 0 ? _fpsCounter.Worst1PercentFPS.ToString() : "N/A";
+        _worst5FPS.text = _fpsCounter.Worst5PercentFPS.ToString();
+        _worst1FPS.text = _fpsCounter.Worst1PercentFPS.ToString();
     }
 
     private void ShowFPS()
