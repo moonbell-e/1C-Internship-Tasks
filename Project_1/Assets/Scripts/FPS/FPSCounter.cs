@@ -3,11 +3,7 @@ using UnityEngine;
 
 public class FPSCounter : MonoBehaviour
 {
-    [SerializeField] private CalculationMethod _calculationMethod;
-
-    private int[] _fpsArray;
     private float[] _frameTimeArray;
-
     private int _frameCount;
     private float _totalFrameTime;
     private float _lastPercentileUpdateTime;
@@ -26,7 +22,6 @@ public class FPSCounter : MonoBehaviour
 
     private void Start()
     {
-        _fpsArray = new int[MaxFPSCount];
         _frameTimeArray = new float[MaxFPSCount];
     }
 
@@ -35,7 +30,8 @@ public class FPSCounter : MonoBehaviour
         if (!_isCalculate) return;
 
         CalculateFPS();
-        bool isIntervalReached = Time.unscaledTime - _lastPercentileUpdateTime >= PercentilesUpdateInterval;
+        var isIntervalReached = Time.unscaledTime - _lastPercentileUpdateTime >= PercentilesUpdateInterval;
+        
         if (isIntervalReached)
         {
             CalculatePercentiles();
@@ -59,7 +55,6 @@ public class FPSCounter : MonoBehaviour
         _totalFrameTime = 0f;
         _frameCount = 0;
         _lastPercentileUpdateTime = 0;
-        Array.Clear(_fpsArray, 0, _fpsArray.Length);
         Array.Clear(_frameTimeArray, 0, _frameTimeArray.Length);
         CurrentFPS = AverageFPS = Worst5PercentFPS = Worst1PercentFPS = 0;
     }
@@ -67,85 +62,37 @@ public class FPSCounter : MonoBehaviour
     private void CalculateFPS()
     {
         _frameCount++;
-        CurrentFPS = (int)(1f / Time.unscaledDeltaTime);
-        UpdateArrays();
-        
-        _totalFrameTime += CountFrameTime();
-        AverageFPS = (int)(_frameCount / _totalFrameTime);
-    }
-
-    private void UpdateArrays()
-    {
-        _fpsArray[CurrentFPS]++;
+        CurrentFPS = (int)(1f / CountFrameTime());
         _frameTimeArray[CurrentFPS] += CountFrameTime();
-    }
-
-    private static float CountFrameTime()
-    {
-        var frameTime = Time.unscaledDeltaTime;
+        _totalFrameTime += CountFrameTime();
         
-        return frameTime;
+        AverageFPS = (int)(_frameCount / _totalFrameTime);
     }
 
     private void CalculatePercentiles()
     {
-        switch (_calculationMethod)
-        {
-            case CalculationMethod.NumberOfFrames:
-                Worst5PercentFPS = (int)GetPercentileOfFPS(FifthPercentile);
-                Worst1PercentFPS = (int)GetPercentileOfFPS(FirstPercentile);
-                break;
-            case CalculationMethod.FrameTime:
-                Worst5PercentFPS = (int)GetPercentileOfFrameTime(FifthPercentile);
-                Worst1PercentFPS = (int)GetPercentileOfFrameTime(FirstPercentile);
-                break;
-        }
+        Worst5PercentFPS = GetPercentile(FifthPercentile);
+        Worst1PercentFPS = GetPercentile(FirstPercentile);
+    }
+    
+    private static float CountFrameTime()
+    {
+        var frameTime = Time.unscaledDeltaTime;
+        return frameTime;
     }
 
-    private float GetPercentileOfFPS(float percentile)
+    private int GetPercentile(float percentile)
     {
-        var thresholdPercent = Mathf.RoundToInt(_frameCount * percentile);
-        if (thresholdPercent == 0) return 0;
-        var framesCount = 0;
-        float result = 0;
-
-        for (var i = 0; framesCount < thresholdPercent; i++)
-        {
-            framesCount += _fpsArray[i];
-            if (framesCount > thresholdPercent)
-            {
-                var difference = framesCount - thresholdPercent;
-                result += i * (_fpsArray[i] - difference);
-            }
-            else
-            {
-                result += i * _fpsArray[i];
-            }
-        }
-        return result / thresholdPercent;
-    }
-
-    private float GetPercentileOfFrameTime(float percentile)
-    {
-        var thresholdPercent = _totalFrameTime * percentile;
-        if (thresholdPercent == 0) return 0;
+        var threshold = _totalFrameTime * percentile;
         float framesCount = 0;
-        float result = 0;
 
-        for (var i = 0; framesCount < thresholdPercent; i++)
+        for (var i = 0; i < _frameTimeArray.Length; i++)
         {
             framesCount += _frameTimeArray[i];
-            if (framesCount > thresholdPercent)
-            {
-                var difference = framesCount - thresholdPercent;
-                result += i * (_frameTimeArray[i] - difference);
-            }
-            else
-            {
-                result += i * _frameTimeArray[i];
-            }
+            if (framesCount >= threshold)
+                return i;
         }
         
-        return result / thresholdPercent;
+        return 0;
     }
 }
