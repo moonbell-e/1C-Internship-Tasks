@@ -9,12 +9,15 @@ public class ObjectGenerator : MonoBehaviour
     
     private const int DeleteCount = 100;
     private const int SpawnCount = 100;
+    private const float LowerBound = -10f;
+    private const float HigherBound = 10f;
+    private const float PosY = 0.5f;
     
     public void GenerateObjects()
     {
         for (var i = 0; i < SpawnCount; i++)
         {
-            var spawnPosition = new Vector3(Random.Range(-10f, 10f), 0.5f, Random.Range(-10f, 10f));
+            var spawnPosition = new Vector3(Random.Range(LowerBound, HigherBound), PosY, Random.Range(LowerBound, HigherBound));
             var newObject = Instantiate(_objectPrefab, spawnPosition, Quaternion.identity, _objectContainer);
             _spawnedObjects.Add(newObject);
         }

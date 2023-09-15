@@ -2,9 +2,8 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class FPSShower : MonoBehaviour
+public class FPSDisplayer : MonoBehaviour
 {
-    [SerializeField] private float _fpsTextUpdateInterval;
     [SerializeField] private TextMeshProUGUI _currentFPS;
     [SerializeField] private TextMeshProUGUI _averageFPS;
     [SerializeField] private TextMeshProUGUI _worst5FPS;
@@ -15,7 +14,9 @@ public class FPSShower : MonoBehaviour
     [SerializeField] private FPSCounter _fpsCounter;
 
     private float _lastFPSTextUpdateTime;
-    private bool _isShowFPS;
+    private bool _isFPSCounted;
+
+    private const float FPSTextUpdateInterval = 0.4f;
 
     private void Start()
     {
@@ -25,34 +26,31 @@ public class FPSShower : MonoBehaviour
 
     private void Update()
     {
-        if (!_isShowFPS || !(Time.unscaledTime - _lastFPSTextUpdateTime >= _fpsTextUpdateInterval)) return;
+        bool isIntervalReached = Time.unscaledTime - _lastFPSTextUpdateTime < FPSTextUpdateInterval;
+        if (!_isFPSCounted || isIntervalReached) return;
+        _lastFPSTextUpdateTime = Time.unscaledTime;
         
         UpdateText();
-        _lastFPSTextUpdateTime = Time.unscaledTime;
     }
 
     private void UpdateText()
     {
         _currentFPS.text = _fpsCounter.CurrentFPS.ToString();
         _averageFPS.text = _fpsCounter.AverageFPS.ToString();
-        _worst5FPS.text = _fpsCounter.Worst5PercentFPS >= 1 ? _fpsCounter.Worst5PercentFPS.ToString() : "N/A";
-        _worst1FPS.text = _fpsCounter.Worst1PercentFPS >= 1 ? _fpsCounter.Worst1PercentFPS.ToString() : "N/A";
+        _worst5FPS.text = _fpsCounter.Worst5PercentFPS >= 0 ? _fpsCounter.Worst5PercentFPS.ToString() : "N/A";
+        _worst1FPS.text = _fpsCounter.Worst1PercentFPS >= 0 ? _fpsCounter.Worst1PercentFPS.ToString() : "N/A";
     }
-    
+
     private void ShowFPS()
     {
-        _isShowFPS = true;
+        _isFPSCounted = true;
         _fpsCounter.ResetFPSCalculation();
     }
 
     private void ResetFPS()
     {
-        _isShowFPS = false;
+        _isFPSCounted = false;
         _fpsCounter.StopFPSCalculation();
-
-        _currentFPS.text = "0";
-        _averageFPS.text = "0";
-        _worst5FPS.text = "0";
-        _worst1FPS.text = "0";
+        UpdateText();
     }
 }

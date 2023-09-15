@@ -3,6 +3,8 @@ using UnityEngine;
 public class ObjectRotator : MonoBehaviour
 {
     private float _rotationSpeed;
+    private const float MinimumSpeed = 50f;
+    private const float MaximumSpeed = 100f;
 
     private void Start()
     {
@@ -21,6 +23,6 @@ public class ObjectRotator : MonoBehaviour
 
     private void RandomizeRotationSpeed()
     {
-        _rotationSpeed = Random.Range(50f, 100f);
+        _rotationSpeed = Random.Range(MinimumSpeed, MaximumSpeed);
     }
 }
