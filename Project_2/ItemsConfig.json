@@ -1,0 +1,64 @@
+{
+   "Items": [
+       {
+           "id": 1,
+           "name": "Health Potion",
+           "price": 10,
+           "quantity": 50
+       },
+       {
+           "id": 2,
+           "name": "Sword",
+           "price": 50,
+           "quantity": 1
+       },
+       {
+           "id": 3,
+           "name": "Shield",
+           "price": 30,
+           "quantity": 1
+       },
+       {
+           "id": 4,
+           "name": "Mana Potion",
+           "price": 15,
+           "quantity": 1
+       },
+       {
+           "id": 5,
+           "name": "Bow",
+           "price": 40,
+           "quantity": 1
+       },
+       {
+           "id": 6,
+           "name": "Arrow",
+           "price": 2,
+           "quantity": 1
+       },
+       {
+           "id": 7,
+           "name": "Helmet",
+           "price": 25,
+           "quantity": 1
+       },
+       {
+           "id": 8,
+           "name": "Gauntlets",
+           "price": 20,
+           "quantity": 1
+       },
+       {
+           "id": 9,
+           "name": "Boots",
+           "price": 20,
+           "quantity": 1
+       },
+       {
+           "id": 10,
+           "name": "Ring",
+           "price": 5,
+           "quantity": 1
+       }
+   ]
+}
