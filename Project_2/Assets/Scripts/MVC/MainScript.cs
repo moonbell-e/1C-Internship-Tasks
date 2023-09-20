@@ -93,6 +93,6 @@ public class MainScript : MonoBehaviour
         _sellButton.onClick.AddListener(SellCurrentItem);
     }
 
-    private bool IsSellAvailable() => (_inventoryController.Model.items.Count > 0) &&
-                                      _inventoryController.Model.items.Count >= _currentItemId;
+    private bool IsSellAvailable() => (_inventoryController.Model.items.Count > 0 &&
+                                      _inventoryController.Model.items.Count >= _currentItemId);
 }
