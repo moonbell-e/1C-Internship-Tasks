@@ -1,3 +1,4 @@
+using System;
 using Newtonsoft.Json;
 using UnityEngine;
 
@@ -13,25 +14,33 @@ public abstract class Controller<T> where T : Model
         this.model = model;
         _fileName = fileName;
     }
-    
+
     protected T LoadJson()
     {
+        if (IsFileExists() == false) return default;
         var jsonData = System.IO.File.ReadAllText(_fileName);
-        return System.IO.File.Exists(_fileName) ? JsonConvert.DeserializeObject<T>(jsonData) : default(T);
+        return JsonConvert.DeserializeObject<T>(jsonData);
     }
+
 
     protected void SaveJson(object data)
     {
+        if (IsFileExists() == false) return;
         var jsonData = JsonConvert.SerializeObject(data);
         System.IO.File.WriteAllText(_fileName, jsonData);
     }
-    
-    public abstract void LoadData();
-    
-    public abstract void SaveData();
-    
-    public abstract void BuyItem(Item item);
-    
-    public abstract void SellItem(Item item);
 
+    private bool IsFileExists()
+    {
+        return System.IO.File.Exists(_fileName);
+    }
+
+
+    public abstract void LoadData();
+
+    protected abstract void SaveData(Item item);
+
+    public abstract void BuyItem(Item item);
+
+    public abstract void SellItem(Item item);
 }

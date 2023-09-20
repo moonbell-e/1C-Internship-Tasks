@@ -1,15 +1,25 @@
-using System.Collections.Generic;
 using TMPro;
-using Unity.VisualScripting;
 using UnityEngine;
 
 public class InventoryView : View<InventoryModel>
 {
     [SerializeField] private TextMeshProUGUI _moneyValue;
 
-    public override void UpdateView(InventoryModel model)
+    protected internal void UpdateViewAdd(Item item, InventoryModel model)
     {
+        base.UpdateViewAdd(item);
         _moneyValue.text = model.money.ToString();
-        UpdateItemsUI(model.items);
+    }
+
+    protected internal void UpdateViewRemove(Item item, InventoryModel model)
+    {
+        base.UpdateViewRemove(item);
+        _moneyValue.text = model.money.ToString();
+    }
+
+    public override void PrepareView(InventoryModel model)
+    {
+        PrepareItemsUI(model.items);
+        _moneyValue.text = model.money.ToString();
     }
 }

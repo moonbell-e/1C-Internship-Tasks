@@ -972,7 +972,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 99932876a2cbb4047a74b9ff68b768b4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _gridLayout: {fileID: 762331996}
+  _gridLayout: {fileID: 762331997}
   _itemPrefab: {fileID: 3310812023146461812, guid: 8834958642ad4e34bb5e81bfa8e06182, type: 3}
   _moneyValue: {fileID: 274961840}
 --- !u!1 &1485369698
@@ -1466,8 +1466,8 @@ Canvas:
   m_GameObject: {fileID: 1860643289}
   m_Enabled: 1
   serializedVersion: 3
-  m_RenderMode: 0
-  m_Camera: {fileID: 0}
+  m_RenderMode: 1
+  m_Camera: {fileID: 963194227}
   m_PlaneDistance: 100
   m_PixelPerfect: 0
   m_ReceivesEvents: 1
@@ -1673,7 +1673,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -516.901, y: 0}
+  m_AnchoredPosition: {x: -516.90106, y: 0}
   m_SizeDelta: {x: -1033.802, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1967839093
@@ -1726,7 +1726,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 761a8df0e0d768c459562b984b1635bc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _gridLayout: {fileID: 1589925917}
+  _gridLayout: {fileID: 1589925918}
   _itemPrefab: {fileID: 3310812023146461812, guid: 8834958642ad4e34bb5e81bfa8e06182, type: 3}
 --- !u!1 &2072144682
 GameObject:

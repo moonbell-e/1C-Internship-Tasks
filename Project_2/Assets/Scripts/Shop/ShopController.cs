@@ -1,32 +1,36 @@
 public class ShopController : Controller<ShopModel>
 {
     private readonly ShopView _shopView;
-    private ShopModel _shopModel;
-    
+    public ShopModel Model { get; private set; }
+
     public ShopController(ShopView view, ShopModel model, string fileName) : base(view, model, fileName)
     {
         _shopView = view;
-        _shopModel = model;
+        Model = model;
     }
 
     public override void LoadData()
     {
-        _shopModel = LoadJson();
-        _shopView.UpdateView(_shopModel);
+        Model = LoadJson();
+        _shopView.PrepareView(Model);
     }
 
-    public override void SaveData()
+    protected override void SaveData(Item item)
     {
-        SaveJson(_shopModel);
+        SaveJson(Model);
     }
 
     public override void BuyItem(Item item)
-    {   
-        //
+    {
+        Model.items.Add(item);
+        _shopView.UpdateViewAdd(item);
+        SaveData(item);
     }
 
     public override void SellItem(Item item)
     {
-        //
+        Model.items.Remove(item);
+        _shopView.UpdateViewRemove(item);
+        SaveData(item);
     }
 }

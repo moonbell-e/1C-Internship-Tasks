@@ -1,36 +1,39 @@
 public class InventoryController : Controller<InventoryModel>
 {
     private readonly InventoryView _inventoryView;
-    private InventoryModel _inventoryModel;
-    
+
+    public InventoryModel Model { get; private set; }
+
     public InventoryController(InventoryView view, InventoryModel model, string fileName) : base(view, model, fileName)
     {
         _inventoryView = view;
-        _inventoryModel = model;
+        Model = model;
     }
 
     public override void LoadData()
     {
-        _inventoryModel = LoadJson();
-        _inventoryView.UpdateView(_inventoryModel);
+        Model = LoadJson();
+        _inventoryView.PrepareView(Model);
     }
 
-    public override void SaveData()
+    protected override void SaveData(Item item)
     {
-        SaveJson(_inventoryModel);
+        SaveJson(Model);
     }
 
     public override void BuyItem(Item item)
     {
-        _inventoryModel.items.Add(item);
-        _inventoryModel.money -= item.price;
-        SaveData();
+        Model.items.Add(item);
+        Model.money -= item.price;
+        _inventoryView.UpdateViewAdd(item, Model);
+        SaveData(item);
     }
 
     public override void SellItem(Item item)
     {
-        _inventoryModel.items.Remove(item);
-        _inventoryModel.money += item.price;
-        SaveData();
+        Model.items.Remove(item);
+        Model.money += item.price;
+        _inventoryView.UpdateViewRemove(item, Model);
+        SaveData(item);
     }
 }

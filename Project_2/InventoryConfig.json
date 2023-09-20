@@ -1,11 +1,11 @@
 {
-   "Items": [
-       {
-           "id": 1,
-           "name": "Gun",
-           "price": 10,
-           "quantity": 1
-       }
-   ],
-    "money": 1000
+  "money": 7000,
+  "items": [
+    {
+      "id": 0,
+      "name": "Gun",
+      "price": 300,
+      "quantity": 1
+    }
+  ]
 }
