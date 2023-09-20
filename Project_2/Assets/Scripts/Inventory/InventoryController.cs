@@ -25,7 +25,9 @@ public class InventoryController : Controller<InventoryModel>
     {
         Model.items.Add(item);
         Model.money -= item.price;
-        _inventoryView.UpdateViewAdd(item, Model);
+
+        var moneyValue = Model.money;
+        _inventoryView.UpdateViewAdd(item, moneyValue);
         SaveData(item);
     }
 
@@ -33,7 +35,9 @@ public class InventoryController : Controller<InventoryModel>
     {
         Model.items.Remove(item);
         Model.money += item.price;
-        _inventoryView.UpdateViewRemove(item, Model);
+        
+        var moneyValue = Model.money;
+        _inventoryView.UpdateViewAdd(item, moneyValue);
         SaveData(item);
     }
 }
