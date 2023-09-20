@@ -4,7 +4,7 @@
            "id": 1,
            "name": "Health Potion",
            "price": 10,
-           "quantity": 50
+           "quantity": 1
        },
        {
            "id": 2,
@@ -46,18 +46,6 @@
            "id": 8,
            "name": "Gauntlets",
            "price": 20,
-           "quantity": 1
-       },
-       {
-           "id": 9,
-           "name": "Boots",
-           "price": 20,
-           "quantity": 1
-       },
-       {
-           "id": 10,
-           "name": "Ring",
-           "price": 5,
            "quantity": 1
        }
    ]

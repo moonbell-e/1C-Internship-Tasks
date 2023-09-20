@@ -1,21 +1,18 @@
-using UnityEngine;
-
-public class InventoryController : Controller
+public class InventoryController : Controller<InventoryModel>
 {
-    private InventoryView _inventoryView;
+    private readonly InventoryView _inventoryView;
     private InventoryModel _inventoryModel;
-    private string _fileName;
     
     public InventoryController(InventoryView view, InventoryModel model, string fileName) : base(view, model, fileName)
     {
         _inventoryView = view;
         _inventoryModel = model;
-        _fileName = fileName;
     }
 
     public override void LoadData()
     {
-        _inventoryModel = LoadJson<InventoryModel>();
+        _inventoryModel = LoadJson();
+        _inventoryView.UpdateView(_inventoryModel);
     }
 
     public override void SaveData()
