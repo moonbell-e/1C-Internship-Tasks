@@ -146,6 +146,7 @@ GameObject:
   - component: {fileID: 7115861275180525334}
   - component: {fileID: 252697260486378291}
   - component: {fileID: 3526022964172854711}
+  - component: {fileID: 3390047716447414488}
   m_Layer: 5
   m_Name: ItemPrefab
   m_TagString: Untagged
@@ -236,8 +237,8 @@ MonoBehaviour:
   m_Colors:
     m_NormalColor: {r: 1, g: 1, b: 1, a: 1}
     m_HighlightedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
-    m_PressedColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 1}
-    m_SelectedColor: {r: 1, g: 0.19245279, b: 0.19245279, a: 1}
+    m_PressedColor: {r: 1, g: 0.39999998, b: 0.39999998, a: 1}
+    m_SelectedColor: {r: 1, g: 0.66415095, b: 0.66415095, a: 1}
     m_DisabledColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 0.5019608}
     m_ColorMultiplier: 1
     m_FadeDuration: 0.1
@@ -257,6 +258,21 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls: []
+--- !u!114 &3390047716447414488
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3310812023146461812}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8a0e6b9bd10841442a7376b36ae98778, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _name: {fileID: 4709037600862930533}
+  _price: {fileID: 1398535408594244401}
+  _quantity: {fileID: 4294519991747362438}
 --- !u!1 &4916980793871722760
 GameObject:
   m_ObjectHideFlags: 0

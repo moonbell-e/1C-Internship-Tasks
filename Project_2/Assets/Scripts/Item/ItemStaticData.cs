@@ -2,10 +2,9 @@
 using System;
 
 [Serializable]
-public class Item
+public class ItemStaticData
 {
-    public int id;
+    public string id;
     public string name;
     public int price;
-    public int quantity;
 }

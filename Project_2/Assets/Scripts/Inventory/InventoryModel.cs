@@ -1,5 +1,8 @@
+using System.Collections.Generic;
 
-public class InventoryModel : Model
+[System.Serializable]
+public class InventoryModel : IModel
 {
+    public List<Item> Items { get; set; }
     public int money;
 }

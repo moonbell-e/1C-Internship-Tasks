@@ -1,0 +1,49 @@
+{
+  "items": [
+    {
+      "id": "big_gun",
+      "name": "Big Gun",
+      "price": 4000
+    },
+    {
+      "id": "grenade",
+      "name": "Grenade",
+      "price": 100
+    },
+    {
+      "id": "first_aid_kit",
+      "name": "First Aid Kit",
+      "price": 150
+    },
+    {
+      "id": "assault_rifle",
+      "name": "Assault Rifle",
+      "price": 800
+    },
+    {
+      "id": "gun",
+      "name": "Gun",
+      "price": 300
+    },
+    {
+      "id": "handgun",
+      "name": "Handgun",
+      "price": 250
+    },
+    {
+      "id": "shotgun",
+      "name": "Shotgun",
+      "price": 500
+    },
+    {
+      "id": "sniper_rifle",
+      "name": "Sniper Rifle",
+      "price": 1200
+    },
+    {
+      "id": "pistol",
+      "name": "Pistol",
+      "price": 300
+    }
+  ]
+}
