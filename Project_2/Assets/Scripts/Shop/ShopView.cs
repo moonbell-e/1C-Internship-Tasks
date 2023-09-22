@@ -18,17 +18,7 @@ public class ShopView : View
             
             var button = item.Value.GetComponent<Button>();
             button.onClick.RemoveAllListeners();
-            button.onClick.AddListener(() => BuyButtonClick(item.Key));
+            button.onClick.AddListener(() => HandleButtonClick(item.Key, OnBuyButtonClicked));
         }
-    }
-
-    private void BuyButtonClick(Item item)
-    {
-        OnBuyButtonClicked?.Invoke(item);
-    }
-
-    private static bool IsHasListeners(Button button)
-    {
-        return button.onClick.GetPersistentEventCount() > 0;
     }
 }

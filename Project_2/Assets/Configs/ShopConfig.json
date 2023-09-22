@@ -1,1 +1,24 @@
-{"Items":[{"id":"assault_rifle","quantity":5},{"id":"pistol","quantity":2},{"id":"grenade","quantity":3},{"id":"gun","quantity":1},{"id":"gun","quantity":1},{"id":"big_gun","quantity":4}]}
+{
+  "Items": [
+    {
+      "id": "shotgun",
+      "quantity": 6
+    },
+    {
+      "id": "grenade",
+      "quantity": 9
+    },
+    {
+      "id": "assault_rifle",
+      "quantity": 5
+    },
+    {
+      "id": "pistol",
+      "quantity": 2
+    },
+    {
+      "id": "gun",
+      "quantity": 1
+    }
+  ]
+}

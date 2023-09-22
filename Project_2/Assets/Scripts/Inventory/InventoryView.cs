@@ -6,6 +6,7 @@ using UnityEngine.UI;
 public class InventoryView : View
 {
     public event Action<Item> OnSellButtonClicked;
+    
     [SerializeField] private TextMeshProUGUI _moneyValue;
 
     private void Start()
@@ -21,7 +22,7 @@ public class InventoryView : View
             
             var button = item.Value.GetComponent<Button>();
             button.onClick.RemoveAllListeners();
-            button.onClick.AddListener(() => SellButtonClick(item.Key));
+            button.onClick.AddListener(() => HandleButtonClick(item.Key, OnSellButtonClicked));
         }
     }
 
@@ -41,15 +42,5 @@ public class InventoryView : View
     {
         PrepareItemsUI(model.Items);
         _moneyValue.text = model.money.ToString();
-    }
-    
-    private void SellButtonClick(Item item)
-    {
-        OnSellButtonClicked?.Invoke(item);
-    }
-    
-    private static bool IsHasListeners(Button button)
-    {
-        return button.onClick.GetPersistentEventCount() > 0;
     }
 }

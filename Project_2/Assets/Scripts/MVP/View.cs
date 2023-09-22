@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public abstract class View : MonoBehaviour
 {
@@ -14,22 +15,46 @@ public abstract class View : MonoBehaviour
     {
         _presenter = presenter;
     }
-    
+
     public void PrepareView(IModel model)
     {
         PrepareItemsUI(model.Items);
     }
+    
+    protected static bool IsHasListeners(Button button)
+    {
+        return button.onClick.GetPersistentEventCount() > 0;
+    }
+    
+    protected static void HandleButtonClick(Item item, Action<Item> buttonAction)
+    {
+        buttonAction?.Invoke(item);
+    }
 
     protected internal void UpdateViewAdd(Item item)
     {
-        UpdateItemsUI(item);
+        if (itemUIObjects.ContainsKey(item))
+        {
+            UpdateItemsUI(item);
+        }
+        else
+        {
+            CreateItemUI(item);
+        }
     }
 
     protected internal void UpdateViewRemove(Item item)
     {
         var go = itemUIObjects[item];
-        itemUIObjects.Remove(item);
-        Destroy(go);
+        if (item.quantity > 0)
+        {
+            HandleTextValues(go, item);
+        }
+        else
+        {
+            itemUIObjects.Remove(item);
+            Destroy(go);
+        }
     }
 
     protected void PrepareItemsUI(List<Item> items)
@@ -44,11 +69,24 @@ public abstract class View : MonoBehaviour
     
     private void UpdateItemsUI(Item item)
     {
+        if (!itemUIObjects.ContainsKey(item))
+        {
+            CreateItemUI(item);
+        }
+        else
+        {
+            var existingUI = itemUIObjects[item];
+            HandleTextValues(existingUI, item);
+        }
+    }
+    
+    private void CreateItemUI(Item item)
+    {
         var itemUI = Instantiate(_itemPrefab, _gridLayout);
         HandleTextValues(itemUI, item);
         itemUIObjects[item] = itemUI;
     }
-
+    
     private void HandleTextValues(GameObject itemUI, Item item)
     {
         var textData = itemUI.GetComponent<ItemTextData>();
