@@ -1,5 +1,7 @@
 using Newtonsoft.Json;
+using UnityEditor;
 using UnityEngine;
+using UnityEngine.PlayerLoop;
 
 public class Presenter
 {
@@ -10,19 +12,16 @@ public class Presenter
     private readonly InventoryView _inventoryView;
     private readonly ShopView _shopView;
 
-    private JsonHandler _jsonHandler;
-
     private readonly string _inventoryFilePath = $"{Application.dataPath}/Configs/InventoryConfig.json";
     private readonly string _shopFilePath = $"{Application.dataPath}/Configs/ShopConfig.json";
     private readonly string _staticFileName = $"{Application.dataPath}/Configs/ItemsStaticConfig.json";
 
-    public Presenter(InventoryView inventoryView, ShopView shopView, ShopModel shopModel, InventoryModel inventoryModel, JsonHandler jsonHandler)
+    public Presenter(InventoryView inventoryView, ShopView shopView, ShopModel shopModel, InventoryModel inventoryModel)
     {
         _inventoryView = inventoryView;
         _shopView = shopView;
         _shopModel = shopModel;
         _inventoryModel = inventoryModel;
-        _jsonHandler = jsonHandler;
 
         _inventoryView.OnSellButtonClicked += SellItem;
         _shopView.OnBuyButtonClicked += BuyItem;
@@ -41,23 +40,28 @@ public class Presenter
 
     public void LoadData()
     {
-        _staticDataModel = _jsonHandler.LoadJson<StaticDataModel>(_staticFileName);
-        _inventoryModel = _jsonHandler.LoadJson<InventoryModel>(_inventoryFilePath);
-        _shopModel = _jsonHandler.LoadJson<ShopModel>(_shopFilePath);
+        _staticDataModel = JsonHandler.LoadJson<StaticDataModel>(_staticFileName);
+        _inventoryModel = JsonHandler.LoadJson<InventoryModel>(_inventoryFilePath);
+        _shopModel = JsonHandler.LoadJson<ShopModel>(_shopFilePath);
 
         PrepareViews();
+    }
+
+    private void SaveData()
+    {
+        JsonHandler.SaveJson(_inventoryModel, _inventoryFilePath);
+        JsonHandler.SaveJson(_shopModel, _shopFilePath);
     }
 
     private void BuyItem(Item item)
     {
         var itemPrice = GetItemPrice(item);
-        
-        if (CanAffordItem(item, itemPrice))
+        if (CanAffordItem(itemPrice))
         {
             _inventoryModel.money -= itemPrice;
-            BuyOneItem(item);
-            _inventoryView.UpdateButtons();
-            _shopView.UpdateButtons();
+            BuyItemOrPackOfItems(item);
+            UpdateShopItemAfterPurchase(item);
+            UpdateButtons();
             SaveData();
         }
         else
@@ -70,33 +74,36 @@ public class Presenter
     {
         _inventoryModel.money += GetItemPrice(item);
         SellOneItem(item);
-        _inventoryView.UpdateButtons();
-        _shopView.UpdateButtons();
+        UpdateButtons();
         SaveData();
     }
-
+    
     private int GetItemPrice(Item item)
     {
         var staticItemData = GetStaticData(item);
         var itemPrice = staticItemData.price;
         return itemPrice;
     }
-    
-    private void SaveData()
-    {
-        _jsonHandler.SaveJson(_inventoryModel, _inventoryFilePath);
-        _jsonHandler.SaveJson(_shopModel, _shopFilePath);
-    }
 
-    private void PrepareViews()
-    {
-        _inventoryView.PrepareView(_inventoryModel);
-        _shopView.PrepareView(_shopModel);
-    }
-    
-    private bool CanAffordItem(Item item, int itemPrice)
+    private bool CanAffordItem(int itemPrice)
     {
         return _inventoryModel.money >= itemPrice;
+    }
+
+    private void BuyItemOrPackOfItems(Item item)
+    {
+        var staticData = GetStaticData(item);
+        if (staticData.content is { Count: > 0 })
+        {
+            foreach (var contentItem in staticData.content)
+            {
+                BuyOneItem(contentItem);
+            }
+        }
+        else
+        {
+            BuyOneItem(item);
+        }
     }
 
     private void BuyOneItem(Item item)
@@ -118,14 +125,6 @@ public class Presenter
             _inventoryModel.Items.Add(newItem);
             _inventoryView.UpdateViewAdd(newItem, _inventoryModel.money);
         }
-
-        item.quantity--;
-        if (item.quantity < 1)
-        {
-            _shopModel.Items.Remove(item);
-        }
-
-        _shopView.UpdateViewRemove(item);
     }
 
     private void SellOneItem(Item item)
@@ -149,8 +148,35 @@ public class Presenter
             _shopView.UpdateViewAdd(newItem);
         }
 
-        item.quantity--;
+        UpdateInventoryItemAfterPurchase(item);
+    }
 
+    private void PrepareViews()
+    {
+        _inventoryView.PrepareView(_inventoryModel);
+        _shopView.PrepareView(_shopModel);
+    }
+
+    private void UpdateButtons()
+    {
+        _inventoryView.UpdateButtons();
+        _shopView.UpdateButtons();
+    }
+    
+    private void UpdateShopItemAfterPurchase(Item item)
+    {
+        item.quantity--;
+        if (item.quantity < 1)
+        {
+            _shopModel.Items.Remove(item);
+        }
+
+        _shopView.UpdateViewRemove(item);
+    }
+
+    private void UpdateInventoryItemAfterPurchase(Item item)
+    {
+        item.quantity--;
         if (item.quantity < 1)
         {
             _inventoryModel.Items.Remove(item);
@@ -158,4 +184,5 @@ public class Presenter
 
         _inventoryView.UpdateViewRemove(item, _inventoryModel.money);
     }
+
 }

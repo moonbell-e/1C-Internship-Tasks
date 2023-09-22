@@ -13,4 +13,9 @@ public class ItemTextData: MonoBehaviour
         _price.text = $"{price} руб";
         _quantity.text = quantity.ToString();
     }
+
+    public void UpdateQuantityData(int quantity)
+    {
+        _quantity.text = quantity.ToString();
+    }
 }

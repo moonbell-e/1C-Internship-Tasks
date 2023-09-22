@@ -6,7 +6,7 @@
     },
     {
       "id": "grenade",
-      "quantity": 9
+      "quantity": 10
     },
     {
       "id": "assault_rifle",
@@ -15,6 +15,10 @@
     {
       "id": "pistol",
       "quantity": 2
+    },
+    {
+      "id": "gun_pack",
+      "quantity": 1
     },
     {
       "id": "gun",

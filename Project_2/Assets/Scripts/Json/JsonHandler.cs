@@ -3,14 +3,14 @@ using UnityEngine;
 
 public class JsonHandler : MonoBehaviour
 {
-    public T LoadJson<T>(string filePath)
+    public static T LoadJson<T>(string filePath)
     {
         if (!IsFileExists(filePath)) return default;
         var jsonData = System.IO.File.ReadAllText(filePath);
         return JsonConvert.DeserializeObject<T>(jsonData);
     }
 
-    public void SaveJson(object data, string filePath)
+    public static void SaveJson(object data, string filePath)
     {
         if (!IsFileExists(filePath)) return;
         var jsonData = JsonConvert.SerializeObject(data);

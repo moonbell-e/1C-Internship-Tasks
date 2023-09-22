@@ -4,7 +4,6 @@ public class MainScript : MonoBehaviour
 {
     [SerializeField] private InventoryView _inventoryView;
     [SerializeField] private ShopView _shopView;
-    [SerializeField] private JsonHandler _jsonHandler;
 
     private Presenter _presenter;
     private InventoryModel _inventoryModel;
@@ -28,6 +27,6 @@ public class MainScript : MonoBehaviour
     {
         _inventoryModel = new InventoryModel();
         _shopModel = new ShopModel();
-        _presenter = new Presenter(_inventoryView, _shopView, _shopModel, _inventoryModel, _jsonHandler);
+        _presenter = new Presenter(_inventoryView, _shopView, _shopModel, _inventoryModel);
     }
 }
