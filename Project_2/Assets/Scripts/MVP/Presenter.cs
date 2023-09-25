@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 
 public class Presenter
@@ -67,13 +68,18 @@ public class Presenter
 
     private void OnButtonClicked(Item item, ButtonType buttonType)
     {
-        if (buttonType == ButtonType.Buy)
+        switch (buttonType)
         {
-            BuyItem(item);
-        }
-        else
-        {
-            SellItem(item);
+            case ButtonType.Buy:
+                BuyItem(item);
+                break;
+            case ButtonType.Sell:
+                SellItem(item);
+                break;
+            case ButtonType.None:
+                break;
+            default:
+                throw new ArgumentOutOfRangeException(nameof(buttonType), buttonType, null);
         }
     }
 
@@ -120,7 +126,7 @@ public class Presenter
         {
             BuyOneItem(item);
         }
-        
+
         UpdateShopItemAfterPurchase(item);
     }
 
