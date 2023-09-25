@@ -270,6 +270,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8a0e6b9bd10841442a7376b36ae98778, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _button: {fileID: 3526022964172854711}
   _name: {fileID: 4709037600862930533}
   _price: {fileID: 1398535408594244401}
   _quantity: {fileID: 4294519991747362438}

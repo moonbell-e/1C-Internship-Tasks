@@ -848,6 +848,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _gridLayout: {fileID: 762331997}
   _itemPrefab: {fileID: 3310812023146461812, guid: 8834958642ad4e34bb5e81bfa8e06182, type: 3}
+  _buttonType: 2
   _moneyValue: {fileID: 274961840}
 --- !u!1 &1550586788
 GameObject:
@@ -1341,11 +1342,12 @@ MonoBehaviour:
   m_GameObject: {fileID: 1967839091}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 761a8df0e0d768c459562b984b1635bc, type: 3}
+  m_Script: {fileID: 11500000, guid: 1bf5dad56e80acb49824737bd007c0aa, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   _gridLayout: {fileID: 1589925918}
   _itemPrefab: {fileID: 3310812023146461812, guid: 8834958642ad4e34bb5e81bfa8e06182, type: 3}
+  _buttonType: 1
 --- !u!1 &2072144682
 GameObject:
   m_ObjectHideFlags: 0

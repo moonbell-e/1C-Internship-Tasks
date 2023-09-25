@@ -10,27 +10,27 @@ public class Presenter
     private StaticDataModel _staticDataModel;
 
     private readonly InventoryView _inventoryView;
-    private readonly ShopView _shopView;
+    private readonly View _shopView;
 
     private readonly string _inventoryFilePath = $"{Application.dataPath}/Configs/InventoryConfig.json";
     private readonly string _shopFilePath = $"{Application.dataPath}/Configs/ShopConfig.json";
     private readonly string _staticFileName = $"{Application.dataPath}/Configs/ItemsStaticConfig.json";
 
-    public Presenter(InventoryView inventoryView, ShopView shopView, ShopModel shopModel, InventoryModel inventoryModel)
+    public Presenter(InventoryView inventoryView, View shopView, ShopModel shopModel, InventoryModel inventoryModel)
     {
         _inventoryView = inventoryView;
         _shopView = shopView;
         _shopModel = shopModel;
         _inventoryModel = inventoryModel;
 
-        _inventoryView.OnSellButtonClicked += SellItem;
-        _shopView.OnBuyButtonClicked += BuyItem;
+        _inventoryView.ButtonClicked += OnButtonClicked;
+        _shopView.ButtonClicked += OnButtonClicked;
     }
 
     ~Presenter()
     {
-        _inventoryView.OnSellButtonClicked -= SellItem;
-        _shopView.OnBuyButtonClicked -= BuyItem;
+        _inventoryView.ButtonClicked -= OnButtonClicked;
+        _shopView.ButtonClicked -= OnButtonClicked;
     }
 
     public ItemStaticData GetStaticData(Item item)
@@ -40,9 +40,9 @@ public class Presenter
 
     public void LoadData()
     {
-        _staticDataModel = JsonHandler.LoadJson<StaticDataModel>(_staticFileName);
-        _inventoryModel = JsonHandler.LoadJson<InventoryModel>(_inventoryFilePath);
-        _shopModel = JsonHandler.LoadJson<ShopModel>(_shopFilePath);
+        SetModelsData();
+        LoadStaticData(_inventoryModel);
+        LoadStaticData(_shopModel);
 
         PrepareViews();
     }
@@ -53,15 +53,40 @@ public class Presenter
         JsonHandler.SaveJson(_shopModel, _shopFilePath);
     }
 
+    private void SetModelsData()
+    {
+        _staticDataModel = JsonHandler.LoadJson<StaticDataModel>(_staticFileName);
+        _inventoryModel = JsonHandler.LoadJson<InventoryModel>(_inventoryFilePath);
+        _shopModel = JsonHandler.LoadJson<ShopModel>(_shopFilePath);
+    }
+
+    private void LoadStaticData(IModel model)
+    {
+        foreach (var item in model.Items)
+        {
+            item.config = GetStaticData(item);
+        }
+    }
+
+    private void OnButtonClicked(Item item, ButtonType buttonType)
+    {
+        if (buttonType == ButtonType.Buy)
+        {
+            BuyItem(item);
+        }
+        else
+        {
+            SellItem(item);
+        }
+    }
+
     private void BuyItem(Item item)
     {
-        var itemPrice = GetItemPrice(item);
-        if (CanAffordItem(itemPrice))
+        var price = item.config.price;
+        if (CanAffordItem(price))
         {
-            _inventoryModel.money -= itemPrice;
+            _inventoryModel.money -= price;
             BuyItemOrPackOfItems(item);
-            UpdateShopItemAfterPurchase(item);
-            UpdateButtons();
             SaveData();
         }
         else
@@ -72,17 +97,11 @@ public class Presenter
 
     private void SellItem(Item item)
     {
-        _inventoryModel.money += GetItemPrice(item);
+        item.config = GetStaticData(item);
+        var price = item.config.price;
+        _inventoryModel.money += price;
         SellOneItem(item);
-        UpdateButtons();
         SaveData();
-    }
-    
-    private int GetItemPrice(Item item)
-    {
-        var staticItemData = GetStaticData(item);
-        var itemPrice = staticItemData.price;
-        return itemPrice;
     }
 
     private bool CanAffordItem(int itemPrice)
@@ -92,10 +111,10 @@ public class Presenter
 
     private void BuyItemOrPackOfItems(Item item)
     {
-        var staticData = GetStaticData(item);
-        if (staticData.content is { Count: > 0 })
+        var staticData = item.config.content;
+        if (staticData?.Count > 0)
         {
-            foreach (var contentItem in staticData.content)
+            foreach (var contentItem in staticData)
             {
                 BuyOneItem(contentItem);
             }
@@ -104,6 +123,8 @@ public class Presenter
         {
             BuyOneItem(item);
         }
+        
+        UpdateShopItemAfterPurchase(item);
     }
 
     private void BuyOneItem(Item item)
@@ -119,7 +140,8 @@ public class Presenter
             var newItem = new Item
             {
                 id = item.id,
-                quantity = 1
+                quantity = 1,
+                config = item.config
             };
 
             _inventoryModel.Items.Add(newItem);
@@ -141,7 +163,8 @@ public class Presenter
             var newItem = new Item
             {
                 id = item.id,
-                quantity = 1
+                quantity = 1,
+                config = item.config
             };
 
             _shopModel.Items.Add(newItem);
@@ -157,12 +180,6 @@ public class Presenter
         _shopView.PrepareView(_shopModel);
     }
 
-    private void UpdateButtons()
-    {
-        _inventoryView.UpdateButtons();
-        _shopView.UpdateButtons();
-    }
-    
     private void UpdateShopItemAfterPurchase(Item item)
     {
         item.quantity--;
@@ -184,5 +201,4 @@ public class Presenter
 
         _inventoryView.UpdateViewRemove(item, _inventoryModel.money);
     }
-
 }

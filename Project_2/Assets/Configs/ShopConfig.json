@@ -1,28 +1,28 @@
 {
   "Items": [
     {
-      "id": "shotgun",
-      "quantity": 6
-    },
-    {
-      "id": "grenade",
-      "quantity": 10
-    },
-    {
       "id": "assault_rifle",
-      "quantity": 5
+      "quantity": 7
+    },
+    {
+      "id": "handgun",
+      "quantity": 12
     },
     {
       "id": "pistol",
-      "quantity": 2
+      "quantity": 10
     },
     {
-      "id": "gun_pack",
-      "quantity": 1
+      "id": "shotgun",
+      "quantity": 4
+    },
+    {
+      "id": "big_gun",
+      "quantity": 3
     },
     {
       "id": "gun",
-      "quantity": 1
+      "quantity": 5
     }
   ]
 }

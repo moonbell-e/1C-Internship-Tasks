@@ -1,16 +1,20 @@
 using System;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UI;
 
-public abstract class View : MonoBehaviour
+public class View : MonoBehaviour
 {
+    public event Action<Item, ButtonType> ButtonClicked;
+
     [SerializeField] private Transform _gridLayout;
     [SerializeField] protected GameObject _itemPrefab;
+    [SerializeField] private ButtonType _buttonType;
 
     private Presenter _presenter;
-    protected readonly Dictionary<Item, GameObject> itemUIObjects = new();
-    
+    private readonly Dictionary<Item, ItemTextData> _itemUIObjects = new();
+
+    public Transform GridLayout => _gridLayout;
+
     public void Init(Presenter presenter)
     {
         _presenter = presenter;
@@ -20,20 +24,15 @@ public abstract class View : MonoBehaviour
     {
         PrepareItemsUI(model.Items);
     }
-    
-    protected static bool IsHasListeners(Button button)
+
+    private void HandleButtonClick(Item item)
     {
-        return button.onClick.GetPersistentEventCount() > 0;
-    }
-    
-    protected static void HandleButtonClick(Item item, Action<Item> buttonAction)
-    {
-        buttonAction?.Invoke(item);
+        ButtonClicked?.Invoke(item, _buttonType);
     }
 
     protected internal void UpdateViewAdd(Item item)
     {
-        if (itemUIObjects.ContainsKey(item))
+        if (_itemUIObjects.ContainsKey(item))
         {
             UpdateItemsUI(item);
         }
@@ -45,52 +44,56 @@ public abstract class View : MonoBehaviour
 
     protected internal void UpdateViewRemove(Item item)
     {
-        var go = itemUIObjects[item];
+        var textData = _itemUIObjects[item];
         if (item.quantity > 0)
         {
-            HandleTextValues(go, item);
+            HandleTextValues(textData, item);
         }
         else
         {
-            itemUIObjects.Remove(item);
-            Destroy(go);
+            _itemUIObjects.Remove(item);
+            Destroy(textData.gameObject);
         }
     }
 
     protected void PrepareItemsUI(List<Item> items)
     {
-        itemUIObjects.Clear();
-
         foreach (var item in items)
         {
-            UpdateItemsUI(item);
+            CreateItemUI(item);
         }
     }
-    
+
     private void UpdateItemsUI(Item item)
     {
-        if (!itemUIObjects.ContainsKey(item))
+        if (!_itemUIObjects.ContainsKey(item))
         {
             CreateItemUI(item);
         }
         else
         {
-            var existingUI = itemUIObjects[item];
+            var existingUI = _itemUIObjects[item];
             HandleTextValues(existingUI, item);
         }
     }
-    
+
     private void CreateItemUI(Item item)
     {
-        var itemUI = Instantiate(_itemPrefab, _gridLayout);
-        HandleTextValues(itemUI, item);
-        itemUIObjects[item] = itemUI;
+        var itemUI = Instantiate(_itemPrefab, _gridLayout).GetComponent<ItemTextData>();
+        _itemUIObjects[item] = itemUI;
+        AddListener(itemUI, item);
+        HandleTextValues(_itemUIObjects[item], item);
     }
-    
-    private void HandleTextValues(GameObject itemUI, Item item)
+
+    private void HandleTextValues(ItemTextData textData, Item item)
     {
-        var textData = itemUI.GetComponent<ItemTextData>();
         var staticData = _presenter.GetStaticData(item);
         textData.SetItemTextData(staticData.name, staticData.price, item.quantity);
+    }
+
+    private void AddListener(ItemTextData itemTextData, Item item)
+    {
+        var button = itemTextData.GetItemButton();
+        button.onClick.AddListener(() => HandleButtonClick(item));
     }
 }

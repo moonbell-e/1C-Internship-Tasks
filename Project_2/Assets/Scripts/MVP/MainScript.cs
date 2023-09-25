@@ -3,7 +3,7 @@ using UnityEngine;
 public class MainScript : MonoBehaviour
 {
     [SerializeField] private InventoryView _inventoryView;
-    [SerializeField] private ShopView _shopView;
+    [SerializeField] private View _shopView;
 
     private Presenter _presenter;
     private InventoryModel _inventoryModel;
@@ -16,13 +16,13 @@ public class MainScript : MonoBehaviour
         InitializeViews();
         _presenter.LoadData();
     }
-    
+
     private void InitializeViews()
     {
         _inventoryView.Init(_presenter);
         _shopView.Init(_presenter);
     }
-    
+
     private void InitializePresenter()
     {
         _inventoryModel = new InventoryModel();
