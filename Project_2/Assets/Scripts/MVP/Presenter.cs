@@ -1,7 +1,4 @@
-using Newtonsoft.Json;
-using UnityEditor;
 using UnityEngine;
-using UnityEngine.PlayerLoop;
 
 public class Presenter
 {

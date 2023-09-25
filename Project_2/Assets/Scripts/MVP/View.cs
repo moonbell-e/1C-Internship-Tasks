@@ -9,12 +9,10 @@ public class View : MonoBehaviour
     [SerializeField] private Transform _gridLayout;
     [SerializeField] protected GameObject _itemPrefab;
     [SerializeField] private ButtonType _buttonType;
-
-    private Presenter _presenter;
+    
     private readonly Dictionary<Item, ItemTextData> _itemUIObjects = new();
-
-    public Transform GridLayout => _gridLayout;
-
+    private Presenter _presenter;
+    
     public void Init(Presenter presenter)
     {
         _presenter = presenter;
@@ -81,7 +79,7 @@ public class View : MonoBehaviour
     {
         var itemUI = Instantiate(_itemPrefab, _gridLayout).GetComponent<ItemTextData>();
         _itemUIObjects[item] = itemUI;
-        AddListener(itemUI, item);
+        AddButtonListener(itemUI, item);
         HandleTextValues(_itemUIObjects[item], item);
     }
 
@@ -91,7 +89,7 @@ public class View : MonoBehaviour
         textData.SetItemTextData(staticData.name, staticData.price, item.quantity);
     }
 
-    private void AddListener(ItemTextData itemTextData, Item item)
+    private void AddButtonListener(ItemTextData itemTextData, Item item)
     {
         var button = itemTextData.GetItemButton();
         button.onClick.AddListener(() => HandleButtonClick(item));

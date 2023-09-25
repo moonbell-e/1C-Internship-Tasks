@@ -23,6 +23,10 @@
     {
       "id": "gun",
       "quantity": 5
+    },
+    {
+      "id": "gun_pack",
+      "quantity": 2
     }
   ]
 }
