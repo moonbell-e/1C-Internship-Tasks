@@ -1,4 +1,5 @@
 using Newtonsoft.Json;
+using Newtonsoft.Json.Serialization;
 using UnityEngine;
 
 public class JsonHandler : MonoBehaviour
@@ -6,14 +7,34 @@ public class JsonHandler : MonoBehaviour
     public static T LoadJson<T>(string filePath)
     {
         if (!IsFileExists(filePath)) return default;
+
+        var settings = new JsonSerializerSettings
+        {
+            Formatting = Formatting.Indented, 
+            ContractResolver = new DefaultContractResolver
+            {
+                NamingStrategy = new SnakeCaseNamingStrategy() 
+            }
+        };
+
         var jsonData = System.IO.File.ReadAllText(filePath);
-        return JsonConvert.DeserializeObject<T>(jsonData);
+        return JsonConvert.DeserializeObject<T>(jsonData, settings);
     }
 
     public static void SaveJson(object data, string filePath)
     {
         if (!IsFileExists(filePath)) return;
-        var jsonData = JsonConvert.SerializeObject(data);
+
+        var settings = new JsonSerializerSettings
+        {
+            Formatting = Formatting.Indented,
+            ContractResolver = new DefaultContractResolver
+            {
+                NamingStrategy = new SnakeCaseNamingStrategy() 
+            }
+        };
+
+        var jsonData = JsonConvert.SerializeObject(data, settings);
         System.IO.File.WriteAllText(filePath, jsonData);
     }
 

@@ -1,16 +1,12 @@
-using System;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class View : MonoBehaviour
+public abstract class View : MonoBehaviour
 {
-    public event Action<Item, ButtonType> ButtonClicked;
-
     [SerializeField] private Transform _gridLayout;
     [SerializeField] protected GameObject _itemPrefab;
-    [SerializeField] private ButtonType _buttonType;
     
-    private readonly Dictionary<Item, ItemTextData> _itemUIObjects = new();
+    protected readonly Dictionary<Item, ItemTextData> itemUIObjects = new();
     private Presenter _presenter;
     
     public void Init(Presenter presenter)
@@ -23,14 +19,9 @@ public class View : MonoBehaviour
         PrepareItemsUI(model.Items);
     }
 
-    private void HandleButtonClick(Item item)
-    {
-        ButtonClicked?.Invoke(item, _buttonType);
-    }
-
     protected internal void UpdateViewAdd(Item item)
     {
-        if (_itemUIObjects.ContainsKey(item))
+        if (itemUIObjects.ContainsKey(item))
         {
             UpdateItemsUI(item);
         }
@@ -42,14 +33,14 @@ public class View : MonoBehaviour
 
     protected internal void UpdateViewRemove(Item item)
     {
-        var textData = _itemUIObjects[item];
+        var textData = itemUIObjects[item];
         if (item.quantity > 0)
         {
             HandleTextValues(textData, item);
         }
         else
         {
-            _itemUIObjects.Remove(item);
+            itemUIObjects.Remove(item);
             Destroy(textData.gameObject);
         }
     }
@@ -64,13 +55,13 @@ public class View : MonoBehaviour
 
     private void UpdateItemsUI(Item item)
     {
-        if (!_itemUIObjects.ContainsKey(item))
+        if (!itemUIObjects.ContainsKey(item))
         {
             CreateItemUI(item);
         }
         else
         {
-            var existingUI = _itemUIObjects[item];
+            var existingUI = itemUIObjects[item];
             HandleTextValues(existingUI, item);
         }
     }
@@ -78,9 +69,9 @@ public class View : MonoBehaviour
     private void CreateItemUI(Item item)
     {
         var itemUI = Instantiate(_itemPrefab, _gridLayout).GetComponent<ItemTextData>();
-        _itemUIObjects[item] = itemUI;
+        itemUIObjects[item] = itemUI;
         AddButtonListener(itemUI, item);
-        HandleTextValues(_itemUIObjects[item], item);
+        HandleTextValues(itemUIObjects[item], item);
     }
 
     private void HandleTextValues(ItemTextData textData, Item item)
@@ -94,4 +85,6 @@ public class View : MonoBehaviour
         var button = itemTextData.GetItemButton();
         button.onClick.AddListener(() => HandleButtonClick(item));
     }
+
+    protected abstract void HandleButtonClick(Item item);
 }

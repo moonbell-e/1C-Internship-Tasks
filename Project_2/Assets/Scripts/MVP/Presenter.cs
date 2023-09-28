@@ -1,4 +1,3 @@
-using System;
 using UnityEngine;
 
 public class Presenter
@@ -8,27 +7,35 @@ public class Presenter
     private StaticDataModel _staticDataModel;
 
     private readonly InventoryView _inventoryView;
-    private readonly View _shopView;
+    private readonly ShopView _shopView;
+
+    private readonly LootboxPresenter _lootboxPresenter;
+    private readonly LootboxView _lootboxView;
 
     private readonly string _inventoryFilePath = $"{Application.dataPath}/Configs/InventoryConfig.json";
     private readonly string _shopFilePath = $"{Application.dataPath}/Configs/ShopConfig.json";
     private readonly string _staticFileName = $"{Application.dataPath}/Configs/ItemsStaticConfig.json";
 
-    public Presenter(InventoryView inventoryView, View shopView, ShopModel shopModel, InventoryModel inventoryModel)
+    public Presenter(InventoryView inventoryView, ShopView shopView, ShopModel shopModel, InventoryModel inventoryModel,
+        LootboxView lootboxView, LootboxPresenter lootboxPresenter)
     {
         _inventoryView = inventoryView;
         _shopView = shopView;
+
         _shopModel = shopModel;
         _inventoryModel = inventoryModel;
 
-        _inventoryView.ButtonClicked += OnButtonClicked;
-        _shopView.ButtonClicked += OnButtonClicked;
+        _lootboxPresenter = lootboxPresenter;
+        _lootboxView = lootboxView;
+
+        _inventoryView.SellButtonClicked += SellItem;
+        _shopView.BuyButtonClicked += BuyItem;
     }
 
     ~Presenter()
     {
-        _inventoryView.ButtonClicked -= OnButtonClicked;
-        _shopView.ButtonClicked -= OnButtonClicked;
+        _inventoryView.SellButtonClicked += SellItem;
+        _shopView.BuyButtonClicked -= BuyItem;
     }
 
     public ItemStaticData GetStaticData(Item item)
@@ -66,23 +73,6 @@ public class Presenter
         }
     }
 
-    private void OnButtonClicked(Item item, ButtonType buttonType)
-    {
-        switch (buttonType)
-        {
-            case ButtonType.Buy:
-                BuyItem(item);
-                break;
-            case ButtonType.Sell:
-                SellItem(item);
-                break;
-            case ButtonType.None:
-                break;
-            default:
-                throw new ArgumentOutOfRangeException(nameof(buttonType), buttonType, null);
-        }
-    }
-
     private void BuyItem(Item item)
     {
         var price = item.config.price;
@@ -107,6 +97,8 @@ public class Presenter
         SaveData();
     }
 
+    private static bool IsLootboxItem(Item item) => item.id.Contains("lootbox");
+
     private bool CanAffordItem(int itemPrice)
     {
         return _inventoryModel.money >= itemPrice;
@@ -115,7 +107,7 @@ public class Presenter
     private void BuyItemOrPackOfItems(Item item)
     {
         var staticData = item.config.content;
-        if (staticData?.Count > 0)
+        if (staticData?.Count > 0 && !IsLootboxItem(item))
         {
             foreach (var contentItem in staticData)
             {
@@ -137,6 +129,7 @@ public class Presenter
         {
             existingItem.quantity++;
             _inventoryView.UpdateViewAdd(existingItem, _inventoryModel.money);
+           CheckLootboxItem(existingItem);
         }
         else
         {
@@ -147,8 +140,17 @@ public class Presenter
                 config = item.config
             };
 
+            if (newItem.config.content.Count > 0)
+            {
+                foreach (var contentItem in newItem.config.content)
+                {
+                    contentItem.config = GetStaticData(contentItem);
+                    Debug.Log(contentItem.config.dropChance);
+                }
+            }
             _inventoryModel.Items.Add(newItem);
             _inventoryView.UpdateViewAdd(newItem, _inventoryModel.money);
+            CheckLootboxItem(newItem);
         }
     }
 
@@ -175,6 +177,14 @@ public class Presenter
         }
 
         UpdateInventoryItemAfterPurchase(item);
+    }
+
+    private void CheckLootboxItem(Item item)
+    {
+        if (!IsLootboxItem(item)) return;
+        _inventoryView.DeactivateLootboxButton(item);
+        _lootboxView.SetActiveLootboxButton(true);
+        _lootboxView.SetCurrentLootbox(item);
     }
 
     private void PrepareViews()
