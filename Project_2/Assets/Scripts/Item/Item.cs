@@ -8,5 +8,5 @@ public class Item
 {
     public string id;
     public int quantity;
-    public ItemStaticData config;
+    [NonSerialized] public ItemStaticData config;
 }
