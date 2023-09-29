@@ -15,16 +15,10 @@ public class MainScript : MonoBehaviour
     private void Start()
     {
         InitializePresenter();
-        InitializeViews();
+        _lootboxPresenter.LoadLootboxData();
         _presenter.LoadData();
     }
-
-    private void InitializeViews()
-    {
-        _inventoryView.Init(_presenter);
-        _shopView.Init(_presenter);
-        _lootboxView.Init(_presenter);
-    }
+    
 
     private void InitializePresenter()
     {

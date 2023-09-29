@@ -1,27 +1,4 @@
 {
-  "money": 18400,
-  "items": [
-    {
-      "id": "lootbox_common",
-      "quantity": 8,
-      "config": {
-        "id": "lootbox_common",
-        "name": "Lootbox-1",
-        "price": 200,
-        "drop_chance": 0.0,
-        "content": [
-          {
-            "id": "grenade",
-            "quantity": 1,
-            "config": null
-          },
-          {
-            "id": "first_aid_kit",
-            "quantity": 1,
-            "config": null
-          }
-        ]
-      }
-    }
-  ]
+  "money": 20000,
+  "items": []
 }

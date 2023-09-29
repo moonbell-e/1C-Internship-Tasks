@@ -6,6 +6,8 @@ public class LootboxView: View
 {
     [SerializeField] private Button _openButton;
     [SerializeField] private Button _takeItemsButton;
+
+    private readonly List<Item> _lootboxesUI = new();
     
     private List<Item> _itemsToReturn;
     private Item _currentLootbox;
@@ -15,21 +17,31 @@ public class LootboxView: View
         _openButton.onClick.AddListener(HandleOpenButtonClick);
     }
 
-    public void SetCurrentLootbox(Item item)
+    private void Update()
     {
+        _openButton.gameObject.SetActive(IsAnyLootboxes());
+    }
+
+    public void AddLootbox(Item  item)
+    {
+        _lootboxesUI.Add(item);
         _currentLootbox = item;
     }
     
-    public void SetActiveLootboxButton(bool isShow)
+
+    private bool IsAnyLootboxes()
     {
-        _openButton.gameObject.SetActive(isShow);
+        return _lootboxesUI.Count > 0;
     }
 
     private void HandleOpenButtonClick()
     {
         _itemsToReturn = LootboxPresenter.OpenLootbox(_currentLootbox);
-        SetActiveLootboxButton(false);
-        PrepareItemsUI(_itemsToReturn);
+        foreach (var variable in _itemsToReturn)
+        {
+            Debug.Log(variable.id);
+            Debug.Log(variable.quantity);
+        }
     }
 
     protected override void HandleButtonClick(Item item)

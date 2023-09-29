@@ -3,26 +3,27 @@
     {
       "id": "big_gun",
       "name": "Big Gun",
-      "price": 4000,
-      "drop_chance": 0.1
+      "price": 4000
     },
     {
       "id": "grenade",
       "name": "Grenade",
-      "price": 100,
-      "drop_chance": 0.5
+      "price": 100
+    },
+    {
+      "id": "adrenalin",
+      "name": "Adrenalin",
+      "price": 80
     },
     {
       "id": "first_aid_kit",
       "name": "First Aid Kit",
-      "price": 150,
-      "drop_chance": 0.5
+      "price": 150
     },
     {
       "id": "assault_rifle",
       "name": "Assault Rifle",
-      "price": 800,
-      "drop_chance": 0.3
+      "price": 800
     },
     {
       "id": "gun",
@@ -37,19 +38,17 @@
     {
       "id": "shotgun",
       "name": "Shotgun",
-      "price": 500,
-      "drop_chance": 0.6
+      "price": 500
     },
     {
       "id": "sniper_rifle",
       "name": "Sniper Rifle",
-      "price": 1200,
-      "drop_chance": 0.2
+      "price": 1200
     },
     {
       "id": "pistol",
       "name": "Pistol",
-      "price": 300
+      "price": 400
     },
     {
       "id": "gun_pack",
@@ -70,44 +69,6 @@
         },
         {
           "id": "pistol",
-          "quantity": 1
-        }
-      ]
-    },
-    {
-      "id": "lootbox_common",
-      "name": "Lootbox-1",
-      "price": 200,
-      "content": [
-        {
-          "id": "grenade",
-          "quantity": 1
-        },
-        {
-          "id": "first_aid_kit",
-          "quantity": 1
-        }
-      ]
-    },
-    {
-      "id": "lootbox_premium",
-      "name": "Lootbox-2",
-      "price": 2000,
-      "content": [
-        {
-          "id": "big_gun",
-          "quantity": 1
-        },
-        {
-          "id": "assault_rifle",
-          "quantity": 1
-        },
-        {
-          "id": "sniper_rifle",
-          "quantity": 1
-        },
-        {
-          "id": "shotgun",
           "quantity": 1
         }
       ]

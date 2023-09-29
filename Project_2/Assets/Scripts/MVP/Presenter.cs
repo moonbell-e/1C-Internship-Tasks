@@ -5,6 +5,7 @@ public class Presenter
     private InventoryModel _inventoryModel;
     private ShopModel _shopModel;
     private StaticDataModel _staticDataModel;
+    private StaticDataModel _lootboxesStaticDataModel;
 
     private readonly InventoryView _inventoryView;
     private readonly ShopView _shopView;
@@ -14,7 +15,7 @@ public class Presenter
 
     private readonly string _inventoryFilePath = $"{Application.dataPath}/Configs/InventoryConfig.json";
     private readonly string _shopFilePath = $"{Application.dataPath}/Configs/ShopConfig.json";
-    private readonly string _staticFileName = $"{Application.dataPath}/Configs/ItemsStaticConfig.json";
+    private readonly string _itemsStaticFileName = $"{Application.dataPath}/Configs/ItemsStaticConfig.json";
 
     public Presenter(InventoryView inventoryView, ShopView shopView, ShopModel shopModel, InventoryModel inventoryModel,
         LootboxView lootboxView, LootboxPresenter lootboxPresenter)
@@ -38,7 +39,7 @@ public class Presenter
         _shopView.BuyButtonClicked -= BuyItem;
     }
 
-    public ItemStaticData GetStaticData(Item item)
+    private ItemStaticData GetItemStaticData(Item item)
     {
         return _staticDataModel.Items.Find(staticItem => staticItem.id == item.id);
     }
@@ -60,7 +61,7 @@ public class Presenter
 
     private void SetModelsData()
     {
-        _staticDataModel = JsonHandler.LoadJson<StaticDataModel>(_staticFileName);
+        _staticDataModel = JsonHandler.LoadJson<StaticDataModel>(_itemsStaticFileName);
         _inventoryModel = JsonHandler.LoadJson<InventoryModel>(_inventoryFilePath);
         _shopModel = JsonHandler.LoadJson<ShopModel>(_shopFilePath);
     }
@@ -69,7 +70,7 @@ public class Presenter
     {
         foreach (var item in model.Items)
         {
-            item.config = GetStaticData(item);
+            item.config = IsLootboxItem(item) ? _lootboxPresenter.GetLootboxStaticData(item) : GetItemStaticData(item);
         }
     }
 
@@ -90,7 +91,7 @@ public class Presenter
 
     private void SellItem(Item item)
     {
-        item.config = GetStaticData(item);
+        item.config = GetItemStaticData(item);
         var price = item.config.price;
         _inventoryModel.money += price;
         SellOneItem(item);
@@ -139,15 +140,7 @@ public class Presenter
                 quantity = 1,
                 config = item.config
             };
-
-            if (newItem.config.content.Count > 0)
-            {
-                foreach (var contentItem in newItem.config.content)
-                {
-                    contentItem.config = GetStaticData(contentItem);
-                    Debug.Log(contentItem.config.dropChance);
-                }
-            }
+            
             _inventoryModel.Items.Add(newItem);
             _inventoryView.UpdateViewAdd(newItem, _inventoryModel.money);
             CheckLootboxItem(newItem);
@@ -183,8 +176,7 @@ public class Presenter
     {
         if (!IsLootboxItem(item)) return;
         _inventoryView.DeactivateLootboxButton(item);
-        _lootboxView.SetActiveLootboxButton(true);
-        _lootboxView.SetCurrentLootbox(item);
+        _lootboxView.AddLootbox(item);
     }
 
     private void PrepareViews()

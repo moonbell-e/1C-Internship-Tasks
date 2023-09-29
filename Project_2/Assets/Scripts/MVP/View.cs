@@ -7,12 +7,6 @@ public abstract class View : MonoBehaviour
     [SerializeField] protected GameObject _itemPrefab;
     
     protected readonly Dictionary<Item, ItemTextData> itemUIObjects = new();
-    private Presenter _presenter;
-    
-    public void Init(Presenter presenter)
-    {
-        _presenter = presenter;
-    }
 
     public void PrepareView(IModel model)
     {
@@ -74,10 +68,9 @@ public abstract class View : MonoBehaviour
         HandleTextValues(itemUIObjects[item], item);
     }
 
-    private void HandleTextValues(ItemTextData textData, Item item)
+    private static void HandleTextValues(ItemTextData textData, Item item)
     {
-        var staticData = _presenter.GetStaticData(item);
-        textData.SetItemTextData(staticData.name, staticData.price, item.quantity);
+        textData.SetItemTextData(item.config.name, item.config.price, item.quantity);
     }
 
     private void AddButtonListener(ItemTextData itemTextData, Item item)

@@ -1,0 +1,70 @@
+{
+  "items": [
+    {
+      "id": "lootbox_common",
+      "name": "Lootbox-1",
+      "price": 200,
+      "type": "multiple",
+      "content": [
+        {
+          "id": "grenade",
+          "quantity": 5,
+          "drop_chance": 0.05
+        },
+        {
+          "id": "grenade",
+          "quantity": 3,
+          "drop_chance": 0.3
+        },
+        {
+          "id": "adrenalin",
+          "quantity": 5,
+          "drop_chance": 0.3
+        },
+        {
+          "id": "adrenalin",
+          "quantity": 3,
+          "drop_chance": 0.7
+        },
+        {
+          "id": "first_aid_kit",
+          "quantity": 5,
+          "drop_chance": 0.2
+        },
+        {
+          "id": "first_aid_kit",
+          "quantity": 1,
+          "drop_chance": 0.9
+        }
+      ]
+    },
+    {
+      "id": "lootbox_premium",
+      "name": "Lootbox-2",
+      "type": "single",
+      "price": 2000,
+      "content": [
+        {
+          "id": "big_gun",
+          "quantity": 1,
+          "drop_chance": 0.1
+        },
+        {
+          "id": "assault_rifle",
+          "quantity": 1,
+          "drop_chance": 0.3
+        },
+        {
+          "id": "sniper_rifle",
+          "quantity": 1,
+          "drop_chance": 0.2
+        },
+        {
+          "id": "shotgun",
+          "quantity": 1,
+          "drop_chance": 0.4
+        }
+      ]
+    }
+  ]
+}
