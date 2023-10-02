@@ -13,10 +13,6 @@ public class Presenter
     private readonly LootboxPresenter _lootboxPresenter;
     private readonly LootboxView _lootboxView;
 
-    private readonly string _inventoryFilePath = $"{Application.dataPath}/Configs/InventoryConfig.json";
-    private readonly string _shopFilePath = $"{Application.dataPath}/Configs/ShopConfig.json";
-    private readonly string _itemsStaticFileName = $"{Application.dataPath}/Configs/ItemsStaticConfig.json";
-
     public Presenter(InventoryView inventoryView, ShopView shopView, ShopModel shopModel, InventoryModel inventoryModel,
         LootboxView lootboxView, LootboxPresenter lootboxPresenter)
     {
