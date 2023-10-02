@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 public class Presenter
@@ -5,8 +6,7 @@ public class Presenter
     private InventoryModel _inventoryModel;
     private ShopModel _shopModel;
     private StaticDataModel _staticDataModel;
-    private StaticDataModel _lootboxesStaticDataModel;
-
+    
     private readonly InventoryView _inventoryView;
     private readonly ShopView _shopView;
 
@@ -29,17 +29,29 @@ public class Presenter
         _lootboxPresenter = lootboxPresenter;
         _lootboxView = lootboxView;
 
-        _inventoryView.SellButtonClicked += SellItem;
-        _shopView.BuyButtonClicked += BuyItem;
+        SubscribeToEvents();
     }
 
     ~Presenter()
     {
-        _inventoryView.SellButtonClicked += SellItem;
-        _shopView.BuyButtonClicked -= BuyItem;
+        UnsubscribeFromEvents();
     }
 
-    private ItemStaticData GetItemStaticData(Item item)
+    private void SubscribeToEvents()
+    {
+        _inventoryView.SellButtonClicked += SellItem;
+        _shopView.BuyButtonClicked += BuyItem;
+        _lootboxView.TakeItemsButtonClicked += AddLootboxItems;
+    }
+
+    private void UnsubscribeFromEvents()
+    {
+        _inventoryView.SellButtonClicked -= SellItem;
+        _shopView.BuyButtonClicked -= BuyItem;
+        _lootboxView.TakeItemsButtonClicked -= AddLootboxItems;
+    }
+
+    public ItemStaticData GetItemStaticData(Item item)
     {
         return _staticDataModel.Items.Find(staticItem => staticItem.id == item.id);
     }
@@ -55,23 +67,53 @@ public class Presenter
 
     private void SaveData()
     {
-        JsonHandler.SaveJson(_inventoryModel, _inventoryFilePath);
-        JsonHandler.SaveJson(_shopModel, _shopFilePath);
+        DataHandler.SaveData(_inventoryModel, _shopModel);
     }
 
     private void SetModelsData()
     {
-        _staticDataModel = JsonHandler.LoadJson<StaticDataModel>(_itemsStaticFileName);
-        _inventoryModel = JsonHandler.LoadJson<InventoryModel>(_inventoryFilePath);
-        _shopModel = JsonHandler.LoadJson<ShopModel>(_shopFilePath);
+        _staticDataModel = DataHandler.LoadStaticData();
+        _inventoryModel =DataHandler.LoadInventoryData();
+        _shopModel = DataHandler.LoadShopData();
     }
 
     private void LoadStaticData(IModel model)
     {
         foreach (var item in model.Items)
         {
-            item.config = IsLootboxItem(item) ? _lootboxPresenter.GetLootboxStaticData(item) : GetItemStaticData(item);
+            item.config = GetItemStaticData(item);
+
+            if (IsLootboxItem(item))
+            {
+                SetLootboxConfigData(item);
+            }
         }
+    }
+
+    private void SetLootboxConfigData(Item item)
+    {
+        var lootboxData = _lootboxPresenter.GetLootboxData(item);
+        item.config.lootbox = lootboxData;
+        item.config.name = lootboxData.name;
+        item.config.price = lootboxData.price;
+
+        foreach (var lootboxItem in lootboxData.content)
+        {
+            lootboxItem.item.config = GetItemStaticData(lootboxItem.item);
+        }
+    }
+
+    private void AddLootboxItems(List<Item> items, Item lootbox, string lootboxType)
+    {
+        foreach (var item in items)
+        {
+            AddItemToInventory(item);
+            if (lootboxType != "single") continue;
+            _inventoryModel.money -= item.config.price;
+        }
+
+        UpdateInventoryItemAfterPurchase(lootbox);
+        SaveData();
     }
 
     private void BuyItem(Item item)
@@ -107,10 +149,10 @@ public class Presenter
 
     private void BuyItemOrPackOfItems(Item item)
     {
-        var staticData = item.config.content;
-        if (staticData?.Count > 0 && !IsLootboxItem(item))
+        var staticData = item.config.itemPack;
+        if (staticData != null && !IsLootboxItem(item))
         {
-            foreach (var contentItem in staticData)
+            foreach (var contentItem in staticData.content)
             {
                 BuyOneItem(contentItem);
             }
@@ -130,17 +172,11 @@ public class Presenter
         {
             existingItem.quantity++;
             _inventoryView.UpdateViewAdd(existingItem, _inventoryModel.money);
-           CheckLootboxItem(existingItem);
+            CheckLootboxItem(existingItem);
         }
         else
         {
-            var newItem = new Item
-            {
-                id = item.id,
-                quantity = 1,
-                config = item.config
-            };
-            
+            var newItem = CreateNewItem(item);
             _inventoryModel.Items.Add(newItem);
             _inventoryView.UpdateViewAdd(newItem, _inventoryModel.money);
             CheckLootboxItem(newItem);
@@ -158,13 +194,7 @@ public class Presenter
         }
         else
         {
-            var newItem = new Item
-            {
-                id = item.id,
-                quantity = 1,
-                config = item.config
-            };
-
+            var newItem = CreateNewItem(item);
             _shopModel.Items.Add(newItem);
             _shopView.UpdateViewAdd(newItem);
         }
@@ -176,13 +206,14 @@ public class Presenter
     {
         if (!IsLootboxItem(item)) return;
         _inventoryView.DeactivateLootboxButton(item);
-        _lootboxView.AddLootbox(item);
+        _lootboxView.SetCurrentLootbox(item);
     }
 
     private void PrepareViews()
     {
         _inventoryView.PrepareView(_inventoryModel);
         _shopView.PrepareView(_shopModel);
+        _lootboxView.ShowOpenButton(_inventoryModel.IsAnyLootboxes());
     }
 
     private void UpdateShopItemAfterPurchase(Item item)
@@ -205,5 +236,21 @@ public class Presenter
         }
 
         _inventoryView.UpdateViewRemove(item, _inventoryModel.money);
+    }
+
+    private void AddItemToInventory(Item item)
+    {
+        _inventoryModel.Items.Add(item);
+        _inventoryView.UpdateViewAdd(item);
+    }
+
+    private static Item CreateNewItem(Item item)
+    {
+        return new Item
+        {
+            id = item.id,
+            quantity = 1,
+            config = item.config
+        };
     }
 }

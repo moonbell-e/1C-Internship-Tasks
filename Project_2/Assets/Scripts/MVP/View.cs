@@ -4,9 +4,15 @@ using UnityEngine;
 public abstract class View : MonoBehaviour
 {
     [SerializeField] private Transform _gridLayout;
-    [SerializeField] protected GameObject _itemPrefab;
-    
+    [SerializeField] private GameObject _itemPrefab;
+
     protected readonly Dictionary<Item, ItemTextData> itemUIObjects = new();
+    private Presenter _presenter;
+
+    public void Init(Presenter presenter)
+    {
+        _presenter = presenter;
+    }
 
     public void PrepareView(IModel model)
     {
@@ -60,7 +66,7 @@ public abstract class View : MonoBehaviour
         }
     }
 
-    private void CreateItemUI(Item item)
+    protected void CreateItemUI(Item item)
     {
         var itemUI = Instantiate(_itemPrefab, _gridLayout).GetComponent<ItemTextData>();
         itemUIObjects[item] = itemUI;
@@ -68,9 +74,10 @@ public abstract class View : MonoBehaviour
         HandleTextValues(itemUIObjects[item], item);
     }
 
-    private static void HandleTextValues(ItemTextData textData, Item item)
+    private void HandleTextValues(ItemTextData textData, Item item)
     {
-        textData.SetItemTextData(item.config.name, item.config.price, item.quantity);
+        var staticData = _presenter.GetItemStaticData(item);
+        textData.SetItemTextData(staticData.name, staticData.price, item.quantity);
     }
 
     private void AddButtonListener(ItemTextData itemTextData, Item item)

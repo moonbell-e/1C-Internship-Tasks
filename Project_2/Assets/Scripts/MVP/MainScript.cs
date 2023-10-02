@@ -15,16 +15,23 @@ public class MainScript : MonoBehaviour
     private void Start()
     {
         InitializePresenter();
+        InitializeViews();
         _lootboxPresenter.LoadLootboxData();
         _presenter.LoadData();
     }
-    
+
+    private void InitializeViews()
+    {
+        _inventoryView.Init(_presenter);
+        _shopView.Init(_presenter);
+        _lootboxView.Init(_presenter);
+    }
 
     private void InitializePresenter()
     {
         _inventoryModel = new InventoryModel();
         _shopModel = new ShopModel();
-        _lootboxPresenter = new LootboxPresenter(_lootboxView);
+        _lootboxPresenter = new LootboxPresenter();
         _presenter = new Presenter(_inventoryView, _shopView, _shopModel, _inventoryModel, _lootboxView,
             _lootboxPresenter);
     }

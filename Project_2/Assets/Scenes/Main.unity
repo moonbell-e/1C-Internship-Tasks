@@ -506,9 +506,15 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _gridLayout: {fileID: 2126932656}
-  _itemPrefab: {fileID: 3310812023146461812, guid: 8834958642ad4e34bb5e81bfa8e06182, type: 3}
+  _itemPrefab: {fileID: 3310812023146461812, guid: b5701139490cc264197acf59e35efeb6, type: 3}
   _openButton: {fileID: 817583805}
   _takeItemsButton: {fileID: 216191561}
+  _lootboxPanel: {fileID: 274343310}
+  _itemsFromLootbox: []
+  _itemsToReturn: []
+  _currentLootbox:
+    id: 
+    quantity: 0
 --- !u!1 &569690977
 GameObject:
   m_ObjectHideFlags: 0

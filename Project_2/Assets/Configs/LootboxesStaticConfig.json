@@ -1,41 +1,67 @@
 {
-  "items": [
+  "lootboxes": [
     {
       "id": "lootbox_common",
       "name": "Lootbox-1",
-      "price": 200,
+      "price": 500,
       "type": "multiple",
+      "slots": [
+        {
+          "slotCount": 1,
+          "weight": 200
+        },
+        {
+          "slotCount": 2,
+          "weight": 100
+        },
+        {
+          "slotCount": 3,
+          "weight": 50
+        }
+      ],
       "content": [
         {
+          "item": {
           "id": "grenade",
-          "quantity": 5,
-          "drop_chance": 0.05
+          "quantity": 5
+          },
+          "dropChance": 5
         },
         {
-          "id": "grenade",
-          "quantity": 3,
-          "drop_chance": 0.3
+          "item": {
+            "id": "grenade",
+            "quantity": 3
+          },
+            "dropChance": 30
         },
         {
-          "id": "adrenalin",
-          "quantity": 5,
-          "drop_chance": 0.3
+          "item": {
+            "id": "adrenalin",
+            "quantity": 5
+          },
+          "dropChance": 30
         },
         {
-          "id": "adrenalin",
-          "quantity": 3,
-          "drop_chance": 0.7
+          "item": {
+            "id": "adrenalin",
+            "quantity": 3
+          },
+            "dropChance": 70
         },
         {
-          "id": "first_aid_kit",
-          "quantity": 5,
-          "drop_chance": 0.2
+          "item": {
+            "id": "first_aid_kit",
+            "quantity": 5
+          },
+          "dropChance": 20
         },
         {
-          "id": "first_aid_kit",
-          "quantity": 1,
-          "drop_chance": 0.9
-        }
+          "item": {
+            "id": "first_aid_kit",
+            "quantity": 1
+          },
+          "dropChance": 90
+      }
       ]
     },
     {
@@ -43,26 +69,44 @@
       "name": "Lootbox-2",
       "type": "single",
       "price": 2000,
+      "slots": [
+        {
+          "slotCount": 3,
+          "weight": 300
+        },
+        {
+          "slotCount": 4,
+          "weight": 100
+        }
+      ],
       "content": [
         {
-          "id": "big_gun",
-          "quantity": 1,
-          "drop_chance": 0.1
+          "item": { 
+            "id": "big_gun",
+            "quantity": 1
+          },
+          "dropChance": 10
         },
         {
-          "id": "assault_rifle",
-          "quantity": 1,
-          "drop_chance": 0.3
+          "item": {
+            "id": "assault_rifle",
+            "quantity": 1
+          },
+          "dropChance": 30
         },
         {
-          "id": "sniper_rifle",
-          "quantity": 1,
-          "drop_chance": 0.2
+          "item": {
+            "id": "sniper_rifle",
+            "quantity": 1
+          },
+          "dropChance": 20
         },
         {
-          "id": "shotgun",
-          "quantity": 1,
-          "drop_chance": 0.4
+          "item": {
+            "id": "shotgun",
+            "quantity": 1
+          },
+          "dropChance": 40
         }
       ]
     }

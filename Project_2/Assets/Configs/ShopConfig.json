@@ -6,11 +6,11 @@
     },
     {
       "id": "handgun",
-      "quantity": 14
+      "quantity": 17
     },
     {
       "id": "pistol",
-      "quantity": 12
+      "quantity": 15
     },
     {
       "id": "shotgun",
@@ -18,15 +18,19 @@
     },
     {
       "id": "big_gun",
-      "quantity": 5
+      "quantity": 8
     },
     {
       "id": "gun",
-      "quantity": 6
+      "quantity": 3
     },
     {
       "id": "lootbox_common",
-      "quantity": 5
+      "quantity": 10
+    },
+    {
+      "id": "lootbox_premium",
+      "quantity": 10
     }
   ]
 }

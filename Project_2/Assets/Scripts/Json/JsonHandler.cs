@@ -13,7 +13,7 @@ public class JsonHandler : MonoBehaviour
             Formatting = Formatting.Indented, 
             ContractResolver = new DefaultContractResolver
             {
-                NamingStrategy = new SnakeCaseNamingStrategy() 
+                NamingStrategy = new CamelCaseNamingStrategy() 
             }
         };
 
@@ -30,7 +30,7 @@ public class JsonHandler : MonoBehaviour
             Formatting = Formatting.Indented,
             ContractResolver = new DefaultContractResolver
             {
-                NamingStrategy = new SnakeCaseNamingStrategy() 
+                NamingStrategy = new CamelCaseNamingStrategy() 
             }
         };
 

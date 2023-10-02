@@ -51,27 +51,35 @@
       "price": 400
     },
     {
+      "id": "lootbox_common"
+    },
+    {
+      "id": "lootbox_premium"
+    },
+    {
       "id": "gun_pack",
       "name": "Gun Pack",
       "price": 4850,
-      "content": [
-        {
-          "id": "big_gun",
-          "quantity": 1
-        },
-        {
-          "id": "gun",
-          "quantity": 1
-        },
-        {
-          "id": "handgun",
-          "quantity": 1
-        },
-        {
-          "id": "pistol",
-          "quantity": 1
-        }
-      ]
+      "itemPack": {
+        "content": [
+          {
+            "id": "big_gun",
+            "quantity": 1
+          },
+          {
+            "id": "gun",
+            "quantity": 1
+          },
+          {
+            "id": "handgun",
+            "quantity": 1
+          },
+          {
+            "id": "pistol",
+            "quantity": 1
+          }
+        ]
+      }
     }
   ]
 }
