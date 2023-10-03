@@ -1,27 +1,49 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
+using UnityEditor;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 public class LootboxPresenter
 {
-    private LootboxStaticDataModel _staticDataModel;
+    public event Action<List<Item>, Item, string> SimpleLootboxOpened;
+    public event Action<List<Item>, Item, string> ComplexLootboxOpened;
+    
+    private readonly LootboxModel _lootboxModel;
 
-    private readonly string _lootboxesStaticFileName = $"{Application.dataPath}/Configs/LootboxesStaticConfig.json";
-
-    public Lootbox GetLootboxData(Item item)
+    public LootboxModel LootboxModel => _lootboxModel;
+    
+    public LootboxPresenter(LootboxModel lootboxModel)
     {
-        var staticData = _staticDataModel.Lootboxes.Find(staticItem => staticItem.id == item.id);
-        return staticData;
+        _lootboxModel = lootboxModel;
     }
 
-    public void LoadLootboxData()
+    public void OpenLootbox(Item item)
     {
-        _staticDataModel = JsonHandler.LoadJson<LootboxStaticDataModel>(_lootboxesStaticFileName);
+        _lootboxModel.Items = GetItemsFromLootbox(item);
+        SimpleLootboxOpened?.Invoke(_lootboxModel.Items, item, item.config.lootbox.type);
     }
 
-    public static List<Item> OpenLootbox(Item item)
+    public void OpenComplexLootbox(Item item)
     {
-        return GetItemsFromLootbox(item);
+        _lootboxModel.Items = GetItemsFromLootbox(item);
+        Debug.Log($"Free item: {_lootboxModel.Items[0].id}");
+    }
+
+    public void TakeItemsFromComplexLootbox(Item item)
+    {
+        ComplexLootboxOpened?.Invoke(_lootboxModel.ItemsToReturn, item, item.config.lootbox.type);
+    }
+
+    public void PurchaseItem(Item item)
+    {
+        _lootboxModel.ItemsToReturn.Add(item);
+        
+        foreach (var lootboxItem in  _lootboxModel.ItemsToReturn)
+        {
+            Debug.Log(lootboxItem.id);
+        }
     }
 
     private static List<Item> GetItemsFromLootbox(Item item)
@@ -33,7 +55,7 @@ public class LootboxPresenter
         {
             PickItemsFromLootbox(itemsToReturn, item);
         }
-        
+
         return itemsToReturn;
     }
 
@@ -53,8 +75,6 @@ public class LootboxPresenter
                 quantity = lootboxItem.item.quantity,
                 config = lootboxItem.item.config
             });
-
-            break;
         }
     }
 
@@ -68,9 +88,9 @@ public class LootboxPresenter
             return slot.slotCount;
         }
 
-        return 1;
+        return 0;
     }
-    
+
     private static float CalculateItemProbability(Item item)
     {
         var sumWeight = item.config.lootbox.content.Sum(lootboxItem => lootboxItem.dropChance);

@@ -10,6 +10,6 @@ public class InventoryModel : IModel
 
     public bool IsAnyLootboxes()
     {
-        return Items.Any(item => item.id.Contains("lootbox"));
+        return Items.Any(item => item.config.lootbox != null);
     }
 }

@@ -51,10 +51,16 @@
       "price": 400
     },
     {
-      "id": "lootbox_common"
+      "id": "lootbox_common",
+      "name": "Lootbox-1",
+      "price": 500,
+      "lootbox": "lootbox_common"
     },
     {
-      "id": "lootbox_premium"
+      "id": "lootbox_premium",
+      "name": "Lootbox-2",
+      "price": 2000,      
+      "lootbox": "lootbox_premium"
     },
     {
       "id": "gun_pack",

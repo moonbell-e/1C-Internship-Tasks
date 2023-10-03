@@ -67,8 +67,8 @@
     {
       "id": "lootbox_premium",
       "name": "Lootbox-2",
-      "type": "single",
       "price": 2000,
+      "type": "single",
       "slots": [
         {
           "slotCount": 3,

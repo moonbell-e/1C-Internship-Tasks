@@ -8,6 +8,7 @@ public class MainScript : MonoBehaviour
 
     private Presenter _presenter;
     private LootboxPresenter _lootboxPresenter;
+    private LootboxModel _lootboxModel;
     private InventoryModel _inventoryModel;
     private ShopModel _shopModel;
     private int _currentItemId;
@@ -16,8 +17,22 @@ public class MainScript : MonoBehaviour
     {
         InitializePresenter();
         InitializeViews();
-        _lootboxPresenter.LoadLootboxData();
         _presenter.LoadData();
+
+        _presenter.BuyItem(_presenter.ShopModel.Items[6]);
+        _lootboxPresenter.OpenLootbox(_presenter.InventoryModel.Items[0]);
+        
+        foreach (var item in _presenter.InventoryModel.Items)
+        {
+             Debug.Log(item.id);   
+             Debug.Log(item.quantity);   
+        }
+
+        // _presenter.BuyItem(_presenter.ShopModel.Items[7]);
+        // _lootboxPresenter.OpenComplexLootbox(_presenter.InventoryModel.Items[0]);
+        // _lootboxPresenter.PurchaseItem(_lootboxPresenter.LootboxModel.Items[0]);
+        // _lootboxPresenter.PurchaseItem(_lootboxPresenter.LootboxModel.Items[2]);
+        // _lootboxPresenter.TakeItemsFromComplexLootbox(_presenter.InventoryModel.Items[0]);
     }
 
     private void InitializeViews()
@@ -31,7 +46,8 @@ public class MainScript : MonoBehaviour
     {
         _inventoryModel = new InventoryModel();
         _shopModel = new ShopModel();
-        _lootboxPresenter = new LootboxPresenter();
+        _lootboxModel = new LootboxModel();
+        _lootboxPresenter = new LootboxPresenter(_lootboxModel);
         _presenter = new Presenter(_inventoryView, _shopView, _shopModel, _inventoryModel, _lootboxView,
             _lootboxPresenter);
     }

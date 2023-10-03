@@ -2,7 +2,7 @@
   "items": [
     {
       "id": "assault_rifle",
-      "quantity": 7
+      "quantity": 8
     },
     {
       "id": "handgun",
@@ -14,23 +14,23 @@
     },
     {
       "id": "shotgun",
-      "quantity": 4
+      "quantity": 6
     },
     {
       "id": "big_gun",
-      "quantity": 8
+      "quantity": 9
     },
     {
-      "id": "gun",
+      "id": "gun_pack",
       "quantity": 3
     },
     {
       "id": "lootbox_common",
-      "quantity": 10
+      "quantity": 9
     },
     {
       "id": "lootbox_premium",
-      "quantity": 10
+      "quantity": 9
     }
   ]
 }

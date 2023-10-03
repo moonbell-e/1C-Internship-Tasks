@@ -66,7 +66,7 @@ public abstract class View : MonoBehaviour
         }
     }
 
-    protected void CreateItemUI(Item item)
+    private void CreateItemUI(Item item)
     {
         var itemUI = Instantiate(_itemPrefab, _gridLayout).GetComponent<ItemTextData>();
         itemUIObjects[item] = itemUI;

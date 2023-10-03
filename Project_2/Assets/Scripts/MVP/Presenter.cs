@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using UnityEditor;
 using UnityEngine;
 
 public class Presenter
@@ -6,12 +7,15 @@ public class Presenter
     private InventoryModel _inventoryModel;
     private ShopModel _shopModel;
     private StaticDataModel _staticDataModel;
-    
+
     private readonly InventoryView _inventoryView;
     private readonly ShopView _shopView;
 
     private readonly LootboxPresenter _lootboxPresenter;
     private readonly LootboxView _lootboxView;
+
+    public InventoryModel InventoryModel => _inventoryModel;
+    public ShopModel ShopModel => _shopModel;
 
     public Presenter(InventoryView inventoryView, ShopView shopView, ShopModel shopModel, InventoryModel inventoryModel,
         LootboxView lootboxView, LootboxPresenter lootboxPresenter)
@@ -37,14 +41,16 @@ public class Presenter
     {
         _inventoryView.SellButtonClicked += SellItem;
         _shopView.BuyButtonClicked += BuyItem;
-        _lootboxView.TakeItemsButtonClicked += AddLootboxItems;
+        _lootboxPresenter.SimpleLootboxOpened += AddLootboxItems;
+        _lootboxPresenter.ComplexLootboxOpened += AddLootboxItems;
     }
 
     private void UnsubscribeFromEvents()
     {
         _inventoryView.SellButtonClicked -= SellItem;
         _shopView.BuyButtonClicked -= BuyItem;
-        _lootboxView.TakeItemsButtonClicked -= AddLootboxItems;
+        _lootboxPresenter.SimpleLootboxOpened -= AddLootboxItems;
+        _lootboxPresenter.ComplexLootboxOpened -= AddLootboxItems;
     }
 
     public ItemStaticData GetItemStaticData(Item item)
@@ -69,7 +75,7 @@ public class Presenter
     private void SetModelsData()
     {
         _staticDataModel = DataHandler.LoadStaticData();
-        _inventoryModel =DataHandler.LoadInventoryData();
+        _inventoryModel = DataHandler.LoadInventoryData();
         _shopModel = DataHandler.LoadShopData();
     }
 
@@ -78,41 +84,26 @@ public class Presenter
         foreach (var item in model.Items)
         {
             item.config = GetItemStaticData(item);
-
-            if (IsLootboxItem(item))
-            {
-                SetLootboxConfigData(item);
-            }
-        }
-    }
-
-    private void SetLootboxConfigData(Item item)
-    {
-        var lootboxData = _lootboxPresenter.GetLootboxData(item);
-        item.config.lootbox = lootboxData;
-        item.config.name = lootboxData.name;
-        item.config.price = lootboxData.price;
-
-        foreach (var lootboxItem in lootboxData.content)
-        {
-            lootboxItem.item.config = GetItemStaticData(lootboxItem.item);
         }
     }
 
     private void AddLootboxItems(List<Item> items, Item lootbox, string lootboxType)
     {
-        foreach (var item in items)
+        for (var i = 0; i < items.Count; i++)
         {
-            AddItemToInventory(item);
-            if (lootboxType != "single") continue;
-            _inventoryModel.money -= item.config.price;
+            AddItemToInventory(items[i]);
+
+            if (i > 0 && lootboxType != "multiple")
+            {
+                _inventoryModel.money -= items[i].config.price;
+            }
         }
 
         UpdateInventoryItemAfterPurchase(lootbox);
         SaveData();
     }
 
-    private void BuyItem(Item item)
+    public void BuyItem(Item item)
     {
         var price = item.config.price;
         if (CanAffordItem(price))
@@ -136,7 +127,7 @@ public class Presenter
         SaveData();
     }
 
-    private static bool IsLootboxItem(Item item) => item.id.Contains("lootbox");
+    private static bool IsLootboxItem(Item item) => item.id.StartsWith("lootbox");
 
     private bool CanAffordItem(int itemPrice)
     {

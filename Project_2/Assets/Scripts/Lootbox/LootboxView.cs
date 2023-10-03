@@ -30,24 +30,24 @@ public class LootboxView : View
     public void SetCurrentLootbox(Item item)
     {
         _currentLootbox = item;
-        _openButton.gameObject.SetActive(true);
+        // _openButton.gameObject.SetActive(true);
     }
 
     private void HandleOpenButtonClick()
     {
-        _itemsFromLootbox = LootboxPresenter.OpenLootbox(_currentLootbox);
-
-        _lootboxPanel.SetActive(true);
-        _openButton.gameObject.SetActive(false);
-
-        foreach (var item in _itemsFromLootbox)
-        {
-            CreateItemUI(item);
-            _lootboxItemsUI.Add(itemUIObjects[item].gameObject);
-        }
-
-        var lootboxTypeHandler = GetLootboxTypeHandler(_currentLootbox.config.lootbox.type);
-        lootboxTypeHandler.HandleItems(_itemsFromLootbox, _itemsToReturn, itemUIObjects);
+        // _itemsFromLootbox = LootboxPresenter.OpenLootbox(_currentLootbox);
+        //
+        // _lootboxPanel.SetActive(true);
+        // _openButton.gameObject.SetActive(false);
+        //
+        // foreach (var item in _itemsFromLootbox)
+        // {
+        //     CreateItemUI(item);
+        //     _lootboxItemsUI.Add(itemUIObjects[item].gameObject);
+        // }
+        //
+        // var lootboxTypeHandler = GetLootboxTypeHandler(_currentLootbox.config.lootbox.type);
+        // lootboxTypeHandler.HandleItems(_itemsFromLootbox, _itemsToReturn, itemUIObjects);
     }
 
     private void HandleTakeItemsButtonClick()
