@@ -2,8 +2,6 @@
   "lootboxes": [
     {
       "id": "lootbox_common",
-      "name": "Lootbox-1",
-      "price": 500,
       "type": "multiple",
       "slots": [
         {
@@ -66,8 +64,6 @@
     },
     {
       "id": "lootbox_premium",
-      "name": "Lootbox-2",
-      "price": 2000,
       "type": "single",
       "slots": [
         {

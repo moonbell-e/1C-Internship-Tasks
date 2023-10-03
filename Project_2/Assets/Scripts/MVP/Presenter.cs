@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using UnityEditor;
 using UnityEngine;
 
 public class Presenter
@@ -127,7 +126,7 @@ public class Presenter
         SaveData();
     }
 
-    private static bool IsLootboxItem(Item item) => item.id.StartsWith("lootbox");
+    private static bool IsLootboxItem(Item item) => item.config.lootbox != null;
 
     private bool CanAffordItem(int itemPrice)
     {
@@ -200,7 +199,6 @@ public class Presenter
     {
         _inventoryView.PrepareView(_inventoryModel);
         _shopView.PrepareView(_shopModel);
-        _lootboxView.ShowOpenButton(_inventoryModel.IsAnyLootboxes());
     }
 
     private void UpdateShopItemAfterPurchase(Item item)

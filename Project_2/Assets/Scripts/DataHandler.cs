@@ -1,4 +1,3 @@
-using System.Collections.Generic;
 using UnityEngine;
 
 public static class DataHandler
@@ -6,9 +5,7 @@ public static class DataHandler
     private static readonly string InventoryFilePath = $"{Application.dataPath}/Configs/InventoryConfig.json";
     private static readonly string ShopFilePath = $"{Application.dataPath}/Configs/ShopConfig.json";
     private static readonly string ItemsStaticFileName = $"{Application.dataPath}/Configs/ItemsStaticConfig.json";
-
-    private static readonly string LootboxesStaticFileName =
-        $"{Application.dataPath}/Configs/LootboxesStaticConfig.json";
+    private static readonly string LootboxesStaticFileName = $"{Application.dataPath}/Configs/LootboxesStaticConfig.json";
 
     public static StaticDataModel LoadStaticData()
     {
