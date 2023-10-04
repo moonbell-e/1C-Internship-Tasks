@@ -1,48 +1,36 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using UnityEngine;
 using Random = UnityEngine.Random;
 
 public class LootboxPresenter
 {
-    public event Action<List<Item>, Item, string> SimpleLootboxOpened;
-    public event Action<List<Item>, Item, string> ComplexLootboxOpened;
-    
     private readonly LootboxModel _lootboxModel;
-
-    public LootboxModel LootboxModel => _lootboxModel;
     
     public LootboxPresenter(LootboxModel lootboxModel)
     {
         _lootboxModel = lootboxModel;
     }
 
-    public void OpenLootbox(Item item)
+    public List<Item> OpenLootbox(Item item)
     {
         _lootboxModel.Items = GetItemsFromLootbox(item);
-        SimpleLootboxOpened?.Invoke(_lootboxModel.Items, item, item.config.lootbox.type);
+        return _lootboxModel.Items;
+    }
+    
+    public void TakeItemsFromMultipleLootbox(Item item, Action<List<Item>, Item, LootboxType> takeLootboxClicked)
+    {
+        takeLootboxClicked?.Invoke(_lootboxModel.Items, item, item.config.lootbox.type);
     }
 
-    public void OpenComplexLootbox(Item item)
+    public void TakeItemsFromSingleLootbox(Item item, Action<List<Item>, Item, LootboxType> takeLootboxClicked)
     {
-        _lootboxModel.Items = GetItemsFromLootbox(item);
-        Debug.Log($"Free item: {_lootboxModel.Items[0].id}");
-    }
-
-    public void TakeItemsFromComplexLootbox(Item item)
-    {
-        ComplexLootboxOpened?.Invoke(_lootboxModel.ItemsToReturn, item, item.config.lootbox.type);
+        takeLootboxClicked?.Invoke(_lootboxModel.ItemsToReturn, item, item.config.lootbox.type);
     }
 
     public void PurchaseItem(Item item)
     {
         _lootboxModel.ItemsToReturn.Add(item);
-        
-        foreach (var lootboxItem in  _lootboxModel.ItemsToReturn)
-        {
-            Debug.Log(lootboxItem.id);
-        }
     }
 
     private static List<Item> GetItemsFromLootbox(Item item)

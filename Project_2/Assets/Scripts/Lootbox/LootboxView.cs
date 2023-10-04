@@ -3,18 +3,27 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class LootboxView : View
+public class LootboxView : MonoBehaviour
 {
-    public event Action<List<Item>, Item, string> TakeItemsButtonClicked;
+    public event Action<List<Item>, Item, LootboxType> TakeItemsButtonClicked;
 
+    [SerializeField] private Transform _gridLayout;
+    [SerializeField] private GameObject _itemPrefab;
+    [SerializeField] private GameObject _lootboxPanel;
     [SerializeField] private Button _openButton;
     [SerializeField] private Button _takeItemsButton;
-    [SerializeField] private GameObject _lootboxPanel;
 
     private readonly List<GameObject> _lootboxItemsUI = new();
-    private List<Item> _itemsFromLootbox = new();
-    private List<Item> _itemsToReturn = new();
+    private readonly Dictionary<Item, ItemTextData> _itemsTextData = new();
+    private LootboxPresenter _lootboxPresenter;
+    private Presenter _presenter;
     private Item _currentLootbox;
+
+    public void Init(LootboxPresenter lootboxPresenter, Presenter presenter)
+    {
+        _lootboxPresenter = lootboxPresenter;
+        _presenter = presenter;
+    }
 
     private void Start()
     {
@@ -22,49 +31,38 @@ public class LootboxView : View
         _takeItemsButton.onClick.AddListener(HandleTakeItemsButtonClick);
     }
 
-    public void ShowOpenButton(bool isShow)
-    {
-        _openButton.gameObject.SetActive(isShow);
-    }
-
     public void SetCurrentLootbox(Item item)
     {
         _currentLootbox = item;
-        // _openButton.gameObject.SetActive(true);
+        _openButton.gameObject.SetActive(true);
     }
 
     private void HandleOpenButtonClick()
     {
-        // _itemsFromLootbox = LootboxPresenter.OpenLootbox(_currentLootbox);
-        //
-        // _lootboxPanel.SetActive(true);
-        // _openButton.gameObject.SetActive(false);
-        //
-        // foreach (var item in _itemsFromLootbox)
-        // {
-        //     CreateItemUI(item);
-        //     _lootboxItemsUI.Add(itemUIObjects[item].gameObject);
-        // }
-        //
-        // var lootboxTypeHandler = GetLootboxTypeHandler(_currentLootbox.config.lootbox.type);
-        // lootboxTypeHandler.HandleItems(_itemsFromLootbox, _itemsToReturn, itemUIObjects);
+        var itemsFromLootbox = _lootboxPresenter.OpenLootbox(_currentLootbox);
+
+        _lootboxPanel.SetActive(true);
+        _openButton.gameObject.SetActive(false);
+
+        foreach (var item in itemsFromLootbox)
+        {
+            CreateItemUI(item);
+        }
     }
 
     private void HandleTakeItemsButtonClick()
     {
-        var lootboxTypeHandler = GetLootboxTypeHandler(_currentLootbox.config.lootbox.type);
-        lootboxTypeHandler.HandleTakeItemsButtonClicked(TakeItemsButtonClicked, _itemsFromLootbox, _currentLootbox,
-            _currentLootbox.config.lootbox.type);
+        switch (_currentLootbox.config.lootbox.type)
+        {
+            case LootboxType.Multiple:
+                _lootboxPresenter.TakeItemsFromMultipleLootbox(_currentLootbox, TakeItemsButtonClicked);
+                break;
+            case LootboxType.Single:
+                _lootboxPresenter.TakeItemsFromSingleLootbox(_currentLootbox, TakeItemsButtonClicked);
+                break;
+        }
 
-        _itemsFromLootbox = new List<Item>();
-        _itemsToReturn = new List<Item>();
         UpdateGridView();
-    }
-
-    protected override void HandleButtonClick(Item item)
-    {
-        _itemsToReturn.Add(item);
-        itemUIObjects[item].GetItemButton().interactable = false;
     }
 
     private void UpdateGridView()
@@ -76,18 +74,35 @@ public class LootboxView : View
 
         _lootboxPanel.SetActive(false);
         _lootboxItemsUI.Clear();
+        _itemsTextData.Clear();
+        _presenter.SetFirstLootboxForView();
     }
 
-    private static ILootboxType GetLootboxTypeHandler(string lootboxType)
+    private void CreateItemUI(Item item)
     {
-        switch (lootboxType)
-        {
-            case "multiple":
-                return new MultipleLootboxType();
-            case "single":
-                return new SingleLootboxType();
-            default:
-                return null;
-        }
+        var itemUI = Instantiate(_itemPrefab, _gridLayout).GetComponent<ItemTextData>();
+        _lootboxItemsUI.Add(itemUI.gameObject);
+        _itemsTextData[item] = itemUI;
+        AddButtonListener(itemUI, item);
+        HandleTextValues(itemUI, item);
+    }
+
+    private void HandleTextValues(ItemTextData textData, Item item)
+    {
+        var staticData = _presenter.GetItemStaticData(item);
+        textData.SetItemTextData(staticData.name, staticData.price, item.quantity);
+    }
+
+    private void AddButtonListener(ItemTextData itemTextData, Item item)
+    {
+        var button = itemTextData.GetItemButton();
+        if (_currentLootbox.config.lootbox.type != LootboxType.Multiple)
+            button.onClick.AddListener(() => HandleButtonClick(item));
+    }
+
+    private void HandleButtonClick(Item item)
+    {
+        _lootboxPresenter.PurchaseItem(item);
+        _itemsTextData[item].GetItemButton().interactable = false;
     }
 }

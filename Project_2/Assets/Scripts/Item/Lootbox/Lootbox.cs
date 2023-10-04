@@ -5,7 +5,7 @@ using System.Collections.Generic;
 public class Lootbox
 {
     public string id;
-    public string type;
+    public LootboxType type;
     public List<LootboxSlot> slots;
     public List<LootboxItem> content;
 }

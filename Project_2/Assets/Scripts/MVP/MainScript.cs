@@ -11,35 +11,19 @@ public class MainScript : MonoBehaviour
     private LootboxModel _lootboxModel;
     private InventoryModel _inventoryModel;
     private ShopModel _shopModel;
-    private int _currentItemId;
 
     private void Start()
     {
         InitializePresenter();
         InitializeViews();
         _presenter.LoadData();
-
-        // _presenter.BuyItem(_presenter.ShopModel.Items[6]);
-        // _lootboxPresenter.OpenLootbox(_presenter.InventoryModel.Items[0]);
-        //
-        // foreach (var item in _presenter.InventoryModel.Items)
-        // {
-        //      Debug.Log(item.id);   
-        //      Debug.Log(item.quantity);   
-        // }
-
-        _presenter.BuyItem(_presenter.ShopModel.Items[7]);
-        _lootboxPresenter.OpenComplexLootbox(_presenter.InventoryModel.Items[0]);
-        _lootboxPresenter.PurchaseItem(_lootboxPresenter.LootboxModel.Items[0]);
-        _lootboxPresenter.PurchaseItem(_lootboxPresenter.LootboxModel.Items[2]);
-        _lootboxPresenter.TakeItemsFromComplexLootbox(_presenter.InventoryModel.Items[0]);
     }
 
     private void InitializeViews()
     {
         _inventoryView.Init(_presenter);
         _shopView.Init(_presenter);
-        _lootboxView.Init(_presenter);
+        _lootboxView.Init(_lootboxPresenter, _presenter);
     }
 
     private void InitializePresenter()
