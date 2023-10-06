@@ -1,11 +1,21 @@
+using System;
 using UnityEngine;
 
 public class Unit : MonoBehaviour
 {
-    [SerializeField] private string _name;
-    [SerializeField] private float _maxHealth;
     [SerializeField] private float _currentHealth;
-    [SerializeField] private UnitType _unitType;
+    [SerializeField] private UnitConfig _config;
+    
+    private string _name;
+    private float _maxHealth;
+    private UnitType _unitType;
+
+    private void Awake()
+    {
+        _name = _config.Name;
+        _maxHealth = _config.MaxHealth;
+        _unitType = _config.UnitType;
+    }
 
     public void SetUnitData(UnitData unitData)
     {

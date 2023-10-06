@@ -96,7 +96,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9dac6f9091f4d7c46be311abfd4eb8af, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _name: Elf
-  _maxHealth: 150
   _currentHealth: 100
-  _unitType: 1
+  _config: {fileID: 11400000, guid: 8e2b7c70b1b2995499eed94aa2d650c8, type: 2}
