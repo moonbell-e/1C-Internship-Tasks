@@ -8,7 +8,7 @@ public class MainScript: MonoBehaviour
     [SerializeField] private SelectType _selectType;
     [SerializeField] private float _radius;
     
-    private List<UnitData> _units;
+    private IEnumerable<UnitData> _units;
     
     private void Start()
     {

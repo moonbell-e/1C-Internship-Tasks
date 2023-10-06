@@ -11,17 +11,17 @@ public class UnitController : MonoBehaviour
         RegisterAllUnits();
     }
     
-    public List<UnitData> SelectUnitsInRadius(Transform center, float radius)
+    public IEnumerable<UnitData> SelectUnitsInRadius(Transform center, float radius)
     {
-        return _unitData.Where(unit => Vector3.Distance(center.position, unit.position) <= radius).ToList();
+        return _unitData.Where(unit => Vector3.Distance(center.position, unit.position) <= radius);
     }
     
-    public List<UnitData> SelectUnitsWithTypeInRadius(Transform center, float radius, UnitType type)
+    public IEnumerable<UnitData> SelectUnitsWithTypeInRadius(Transform center, float radius, UnitType type)
     {
-        return _unitData.Where(unit => Vector3.Distance(center.position, unit.position) <= radius).Where(unit => type == unit.type).ToList();
+        return _unitData.Where(unit => Vector3.Distance(center.position, unit.position) <= radius).Where(unit => type == unit.type);
     }
 
-    public List<UnitData> SelectAllUnits()
+    public IEnumerable<UnitData> SelectAllUnits()
     {
         return _unitData;
     }
