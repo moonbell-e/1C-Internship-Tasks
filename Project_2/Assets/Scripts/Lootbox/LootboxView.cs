@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -10,7 +11,6 @@ public class LootboxView : MonoBehaviour
     [SerializeField] private Transform _gridLayout;
     [SerializeField] private GameObject _itemPrefab;
     [SerializeField] private GameObject _lootboxPanel;
-    [SerializeField] private Button _openButton;
     [SerializeField] private Button _takeItemsButton;
 
     private readonly List<GameObject> _lootboxItemsUI = new();
@@ -27,26 +27,23 @@ public class LootboxView : MonoBehaviour
 
     private void Start()
     {
-        _openButton.onClick.AddListener(HandleOpenButtonClick);
         _takeItemsButton.onClick.AddListener(HandleTakeItemsButtonClick);
     }
 
     public void SetCurrentLootbox(Item item)
     {
         _currentLootbox = item;
-        _openButton.gameObject.SetActive(true);
     }
 
-    private void HandleOpenButtonClick()
+    public void HandleOpenButtonClick(Item item)
     {
-        var itemsFromLootbox = _lootboxPresenter.OpenLootbox(_currentLootbox);
+        var itemsFromLootbox = _lootboxPresenter.OpenLootbox(item);
 
         _lootboxPanel.SetActive(true);
-        _openButton.gameObject.SetActive(false);
 
-        foreach (var item in itemsFromLootbox)
+        foreach (var lootboxItem in itemsFromLootbox)
         {
-            CreateItemUI(item);
+            CreateItemUI(lootboxItem);
         }
     }
 

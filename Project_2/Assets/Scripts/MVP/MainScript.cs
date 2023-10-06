@@ -32,7 +32,6 @@ public class MainScript : MonoBehaviour
         _shopModel = new ShopModel();
         _lootboxModel = new LootboxModel();
         _lootboxPresenter = new LootboxPresenter(_lootboxModel);
-        _presenter = new Presenter(_inventoryView, _shopView, _shopModel, _inventoryModel, _lootboxView,
-            _lootboxPresenter);
+        _presenter = new Presenter(_inventoryView, _shopView, _shopModel, _inventoryModel, _lootboxView);
     }
 }

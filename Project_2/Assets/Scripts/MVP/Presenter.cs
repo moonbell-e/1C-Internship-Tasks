@@ -9,20 +9,16 @@ public class Presenter
 
     private readonly InventoryView _inventoryView;
     private readonly ShopView _shopView;
-
-    private readonly LootboxPresenter _lootboxPresenter;
     private readonly LootboxView _lootboxView;
 
     public Presenter(InventoryView inventoryView, ShopView shopView, ShopModel shopModel, InventoryModel inventoryModel,
-        LootboxView lootboxView, LootboxPresenter lootboxPresenter)
+        LootboxView lootboxView)
     {
         _inventoryView = inventoryView;
         _shopView = shopView;
 
         _shopModel = shopModel;
         _inventoryModel = inventoryModel;
-
-        _lootboxPresenter = lootboxPresenter;
         _lootboxView = lootboxView;
 
         SubscribeToEvents();
@@ -66,7 +62,7 @@ public class Presenter
         if (_inventoryModel.IsAnyLootboxes())
             _lootboxView.SetCurrentLootbox(_inventoryModel.GetFirstLootbox());
     }
-
+    
     private void SaveData()
     {
         DataHandler.SaveData(_inventoryModel, _shopModel);
@@ -204,7 +200,6 @@ public class Presenter
     private void CheckLootboxItem(Item item)
     {
         if (!IsLootboxItem(item)) return;
-        _inventoryView.DeactivateLootboxButton(item);
         _lootboxView.SetCurrentLootbox(item);
     }
 
